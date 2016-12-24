@@ -8,6 +8,10 @@
 #ifndef TEST_H_
 #define TEST_H_
 
+#include "SDL2\SDL.h"
+#include "SDL2\SDL_image.h"
+#include <stdio.h>
+
 class Test {
 };
 
