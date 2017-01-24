@@ -1,15 +1,13 @@
 
-#include "Main.h"
+#include "../Header/Main.h"
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 1920;
-const int SCREEN_HEIGHT = 1080;
+
 
 //Initialises SDL and its subsystems
 bool init( SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer ){
 	bool initFlag = false;
 
-	if ( SDL_Init( SDL_INIT_VIDEO|SDL_INIT_AUDIO ) < 0){
+	if ( SDL_Init( SDL_INIT_EVERYTHING ) < 0){
 
 	}
 	else{
@@ -23,7 +21,7 @@ bool init( SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer ){
 		}
 		else{
 
-			targetRenderer = SDL_CreateRenderer( targetWindow, -1, SDL_RENDERER_ACCELERATED );
+			targetRenderer = SDL_CreateRenderer( targetWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 
 			if ( targetRenderer == NULL ){
 
@@ -51,7 +49,7 @@ bool init( SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer ){
 	return initFlag;
 }
 
-SDL_Texture* loadTexture(SDL_Renderer* &targetRenderer, std::string path ){
+SDL_Texture* loadTexture(SDL_Renderer* targetRenderer, std::string path ){
 
 	//Output as final texture
 	SDL_Texture* ouputTexture = NULL;
@@ -78,7 +76,7 @@ SDL_Texture* loadTexture(SDL_Renderer* &targetRenderer, std::string path ){
 }
 
 //Closes SDL and frees memory
-void close(SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer){
+void close(SDL_Window* targetWindow, SDL_Renderer* targetRenderer){
 
 //TODO add function to free all textures
 
@@ -96,6 +94,9 @@ int main( int argc, char* args[] ){
 
 //TODO add vector for textures
 
+	Asset_path_loader image;
+
+
 	//The window that will be rendered to
 	SDL_Window* window = NULL;
 
@@ -103,39 +104,48 @@ int main( int argc, char* args[] ){
 	SDL_Renderer* mainRenderer = NULL;
 
 	//The texture currently displayed
-	SDL_Texture* mainTexture = NULL;
+//	SDL_Texture* mainTexture = NULL;
 
 
+
+	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window, mainRenderer) ){
+
+		MenuManager* menus[] = {new MainMenu(mainRenderer)};
+
+		Timer frame_rate_cap;
+		frame_rate_cap.start();
 
 		bool quit = false;
 		SDL_Event event;
 
 		while( !quit ){
 
-			while( SDL_PollEvent( &event ) != 0 ){
-				switch( event.type ){
+			menus[0]->eventHandler(event, quit);
 
-					case SDL_QUIT:{
-						quit = true;
-						break;
-					}
-
-					default:{
-						break;
-					}
-				}
+			/*if( TEMP_FRAME_RATE_CAP <= frame_rate_cap.get_time_elapsed()){
+				SDL_Delay(TEMP_FRAME_RATE_CAP - frame_rate_cap.get_time_elapsed());
+			}
+			frame_rate_cap.reset();*/
 
 			//Clear screen
-			SDL_RenderClear(mainRenderer);
+			SDL_RenderClear( mainRenderer );
 
-			//Render texture to screen
-			SDL_RenderCopy( mainRenderer, mainTexture, NULL, NULL );
+
+//			std::cout << loadTexture(mainRenderer, "Assets//Images//player.png") << std::endl;
+
+//			SDL_RenderCopy( mainRenderer, mainTexture, NULL, NULL );
+
+			//SDL_RenderCopy(mainRenderer, loadTexture(mainRenderer, "Assets//Images//player.png"), NULL, &a);
+
+//			test_balls.render(2);
+
+			menus[0]->renderTexture();
 
 			//Push to screen
 			SDL_RenderPresent( mainRenderer );
 
-			}
+
 		}
 	}
 
