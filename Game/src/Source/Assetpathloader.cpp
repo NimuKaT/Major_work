@@ -15,7 +15,7 @@ Asset_path_loader::Asset_path_loader() {
 		printf( "Paths of image files could not be loaded. SDL error: %s\n", SDL_GetError() );
 	}
 	else{
-		std::cout << SDL_RWtell(imageFile) << std::endl;
+//		std::cout << SDL_RWtell(imageFile) << std::endl;
 	}
 
 	/*std::ifstream image;

@@ -11,6 +11,7 @@
 #include "Global.h"
 
 #include "Texture.h"
+#include "Text.h"
 
 class MenuManager{
 public:
@@ -33,7 +34,7 @@ public:
 	std::vector< std::string > spritePaths;
 	std::vector< SDL_Rect > clips;
 
-
+	Text test_text;
 
 private:
 	Texture main_menu_background;

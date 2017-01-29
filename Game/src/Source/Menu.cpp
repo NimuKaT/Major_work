@@ -9,7 +9,14 @@
 
 inline MenuManager::~MenuManager(){};
 
-
+void create_queue( std::vector< std::vector< int > >* queue, int spire_number, int x_coordinate, int y_coordinate, int clip_number ){
+	std::vector< int > new_queue;
+	new_queue.push_back(spire_number);
+	new_queue.push_back(x_coordinate);
+	new_queue.push_back(y_coordinate);
+	new_queue.push_back(clip_number);
+	queue->push_back(new_queue);
+}
 
 MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
@@ -23,6 +30,12 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 	add_rect_to_vector(clips, 0, 100, 100, 100);
 	add_rect_to_vector(clips, 100, 0, 100, 100);
 	add_rect_to_vector(clips, 100, 100, 100, 100);
+
+	SDL_Rect test_text_clip = {0, 0, 300, 200};
+	test_text.init(_renderer, "Sans", "Hello, World!", test_text_clip);
+
+	test_text.set_color( 0, 0, 0, 100 );
+	test_text.set_font_size(16);
 
 //	spritePaths.push_back("Assets/Images/player.png");
 
@@ -45,8 +58,10 @@ void MainMenu::renderTexture(){
 
 	main_menu_background.render();
 	for( auto &current_queue : queue){
-		sprite_sheets[current_queue[0]].render(current_queue[1]);
+		sprite_sheets[current_queue[0]].render(current_queue[1], current_queue[2], current_queue[3]);
 	}
+
+	test_text.render( 100, 100 );
 
 	queue.clear();
 
@@ -111,31 +126,21 @@ void MainMenu::eventHandler( SDL_Event &event, bool &quit ){
 
 	if(key_pressed[KEY_PRESS_W]){
 
-		std::vector<int> new_queue;
-		new_queue.push_back( 0 );
-		new_queue.push_back( 0 );
-		queue.push_back(new_queue);
+		create_queue( &queue, 0, 0, 0, 0 );
 	}
 	if(key_pressed[KEY_PRESS_A]){
 
-		std::vector<int> new_queue;
-		new_queue.push_back( 0 );
-		new_queue.push_back( 1 );
-		queue.push_back(new_queue);
+		create_queue( &queue, 0, 0, 0, 1);
 	}
 	if(key_pressed[KEY_PRESS_S]){
 
-		std::vector<int> new_queue;
-		new_queue.push_back( 0 );
-		new_queue.push_back( 2 );
-		queue.push_back(new_queue);
+
+		create_queue( &queue, 0, 0, 0, 2);
+
 	}
 	if(key_pressed[KEY_PRESS_D]){
 
-		std::vector<int> new_queue;
-		new_queue.push_back( 0 );
-		new_queue.push_back( 3 );
-		queue.push_back(new_queue);
+		create_queue( &queue, 0, 0, 0, 3);
 	}
 	if(key_pressed[KEY_PRESS_DEFAULT]){
 

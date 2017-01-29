@@ -17,15 +17,28 @@ void add_rect_to_vector(std::vector< SDL_Rect> &, int, int, int, int);
 
 class Texture{
 public:
-	void init( SDL_Renderer* , std::string, std::vector< SDL_Rect > = std::vector< SDL_Rect >() );
-	void loadTexture();
-	void render(int = 0);
+	void init( SDL_Renderer* , std::string = std::string(), std::vector< SDL_Rect > = std::vector< SDL_Rect >() );
+	void render(int = 0, int = 0, int = 0);
+	void set_as_render_target();
+	SDL_Rect get_rect(int);
+	void create_blank_texture(int, int);
+
+	SDL_Texture* objectTexture;
+	std::vector< SDL_Rect > sprite_clips;
+	SDL_Renderer* _renderer_ptr;
+	int _width, _height;
 
 private:
-	SDL_Renderer* _renderer_ptr;
-	SDL_Texture* objectTexture;
+	void loadTexture();
+	void clip_from_texture();
+
+
+
+
 	std::string image_path;
-	std::vector< SDL_Rect > sprite_clips;
+
+
+
 };
 
 

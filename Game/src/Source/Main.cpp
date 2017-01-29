@@ -39,8 +39,12 @@ bool init( SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer ){
 				}
 				else{
 
-					initFlag = true;
-
+					if( TTF_Init() == -1){
+						printf( "SDL_ttf could not initialise. Error: %s\n", TTF_GetError() );
+					}
+					else{
+						initFlag = true;
+					}
 				}
 			}
 		}
@@ -94,7 +98,7 @@ int main( int argc, char* args[] ){
 
 //TODO add vector for textures
 
-	Asset_path_loader image;
+//	Asset_path_loader image;
 
 
 	//The window that will be rendered to
