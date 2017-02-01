@@ -11,11 +11,8 @@
 const std::string SANS  = "Assets/Fonts/OpenSans-Regular.ttf";
 
 Text::Text(){
-	_renderer_ptr = NULL;
 	_font_size = 0;
 	_font = NULL;
-	_width = 0;
-	_height = 0;
 }
 
 
@@ -109,3 +106,6 @@ void Text::update_font(){
 	TTF_CloseFont( _font ); //Free currently open font
 	_font = TTF_OpenFont( _font_path.c_str(), _font_size);
 }
+
+
+

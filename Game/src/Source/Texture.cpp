@@ -7,6 +7,13 @@
 
 #include "../Header/Texture.h"
 
+Texture::Texture(){
+	objectTexture = NULL;
+	_renderer_ptr = NULL;
+	_width = 0;
+	_height = 0;
+}
+
 void add_rect_to_vector(std::vector<SDL_Rect> &rect_vector, int x, int y, int h, int w){
 	SDL_Rect temp_rect;
 	temp_rect.x = x;
@@ -71,6 +78,10 @@ void Texture::set_as_render_target(){
 }
 
 void Texture::create_blank_texture(int width, int height){
+
+	SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor( _renderer_ptr, 0xFF, 0xFF, 0xFF, 0x00 );
 	objectTexture = SDL_CreateTexture( _renderer_ptr, SDL_PIXELFORMAT_RGBA8888, NULL, width, height);
 	if( objectTexture == NULL){
 		std::cout << "Could not create blank texture. SDL_Error: %s\n" << SDL_GetError() << std::endl;
@@ -90,6 +101,8 @@ void Texture::clip_from_texture(){
 	add_rect_to_vector(sprite_clips, 0, 0, _height, _width);
 }
 
-
+void Texture::get_renderer(	SDL_Renderer* targetRenderer ){
+	_renderer_ptr = targetRenderer;
+}
 
 

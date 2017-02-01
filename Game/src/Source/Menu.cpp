@@ -22,6 +22,8 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
 	_renderer = targetRenderer;
 	spritePaths.push_back("Assets/Images/test_balls.png");
+	spritePaths.push_back("Assets/Images/test_UI_element.png");
+
 
 	std::string path_bg = "Assets/Images/temp_main_menu_background.png";
 	main_menu_background.init(targetRenderer, path_bg);
@@ -39,6 +41,8 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
 //	spritePaths.push_back("Assets/Images/player.png");
 
+
+
 	std::string paths;
 
 	for( int i = 0; i < spritePaths.size(); i++){
@@ -46,6 +50,9 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 		temp_texture.init( targetRenderer, spritePaths[i], clips);
 		sprite_sheets.push_back(temp_texture);
 	}
+
+	_test_button.init_element( _renderer, "Hello, World!", &sprite_sheets[1],0);
+	_test_button.set_position(300, 300);
 
 	for( int i = 0; i < KEY_PRESS_DEFAULT; i++){
 		key_pressed[i] = false;
@@ -62,6 +69,8 @@ void MainMenu::renderTexture(){
 	}
 
 	test_text.render( 100, 100 );
+
+	_test_button.draw_element();
 
 	queue.clear();
 

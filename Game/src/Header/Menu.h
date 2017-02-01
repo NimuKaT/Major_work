@@ -12,6 +12,7 @@
 
 #include "Texture.h"
 #include "Text.h"
+#include "UIhandler.h"
 
 class MenuManager{
 public:
@@ -37,6 +38,7 @@ public:
 	Text test_text;
 
 private:
+	UI_element _test_button;
 	Texture main_menu_background;
 	bool key_pressed[KEY_PRESS_DEFAULT];
 
