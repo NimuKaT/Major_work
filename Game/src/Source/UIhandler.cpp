@@ -27,23 +27,25 @@ bool UI_element::init_element(SDL_Renderer* target_renderer, std::string text, T
 	_element_text = text;
 	_clip_number = clip_number;
 	SDL_Rect decoration_clip = _decoration_ptr->get_rect(_clip_number);
-	decoration_clip.w = 650;
-	decoration_clip.h = 150;
 	if( decoration_clip.w == 0 || decoration_clip.h == 0 ){
 		std::cout << "The clip number specified did not exist.\n" << std::endl;
 	}
 	else{
 		_element_texture.get_renderer( _renderer_ptr );
 		_element_texture.create_blank_texture( decoration_clip.w, decoration_clip.h );
-		_element_texture.set_as_render_target();
-//		_decoration_ptr->render(_clip_number);
 
 		SDL_Rect text_clip = { 0, 0, decoration_clip.w - 2*5, decoration_clip.h - 2*5};
 
-//		_text_texture.init( _renderer_ptr, "Sans", text, text_clip);
-//		_text_texture.set_color( 0, 0, 0, 100);
-//		_text_texture.set_font_size( 4 );
-//		_text_texture.render( 5, 5 );
+		_text_texture.init( _renderer_ptr, "Sans", text, text_clip);
+		_text_texture.set_color( 255, 0, 0, 100);
+		_text_texture.set_font_size( 42 );
+
+		_element_texture.set_as_render_target();
+
+		_decoration_ptr->render( 0 ,0, _clip_number);
+		_text_texture.render( 5, 5 );
+
+
 
 		element_init = true;
 

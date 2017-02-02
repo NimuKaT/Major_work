@@ -65,6 +65,8 @@ void Texture::loadTexture(){
 void Texture::render( int x, int y, int clip_num ){
 //	std::cout << "rendering : "<< image_path << std::endl;
 	if (!sprite_clips.empty()){
+		SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
 		SDL_Rect dstrect = { x, y, sprite_clips[clip_num].w, sprite_clips[clip_num].h };
 		SDL_RenderCopy(_renderer_ptr, objectTexture, &sprite_clips[clip_num], &dstrect );
 	}
@@ -82,7 +84,8 @@ void Texture::create_blank_texture(int width, int height){
 	SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor( _renderer_ptr, 0xFF, 0xFF, 0xFF, 0x00 );
-	objectTexture = SDL_CreateTexture( _renderer_ptr, SDL_PIXELFORMAT_RGBA8888, NULL, width, height);
+
+	objectTexture = SDL_CreateTexture( _renderer_ptr, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
 	if( objectTexture == NULL){
 		std::cout << "Could not create blank texture. SDL_Error: %s\n" << SDL_GetError() << std::endl;
 	}
@@ -99,6 +102,7 @@ void Texture::clip_from_texture(){
 	SDL_QueryTexture(objectTexture, NULL, NULL, &_width, &_height);
 	sprite_clips.clear();
 	add_rect_to_vector(sprite_clips, 0, 0, _height, _width);
+	std::cout << "creating clip" << std::endl;
 }
 
 void Texture::get_renderer(	SDL_Renderer* targetRenderer ){

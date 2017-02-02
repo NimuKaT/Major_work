@@ -32,6 +32,7 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 	add_rect_to_vector(clips, 0, 100, 100, 100);
 	add_rect_to_vector(clips, 100, 0, 100, 100);
 	add_rect_to_vector(clips, 100, 100, 100, 100);
+	add_rect_to_vector(clips, 0, 0, 150, 650);
 
 	SDL_Rect test_text_clip = {0, 0, 300, 200};
 	test_text.init(_renderer, "Sans", "Hello, World!", test_text_clip);
@@ -51,7 +52,7 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 		sprite_sheets.push_back(temp_texture);
 	}
 
-	_test_button.init_element( _renderer, "Hello, World!", &sprite_sheets[1],0);
+	_test_button.init_element( _renderer, "Hello, World!", &sprite_sheets[1], 4 );
 	_test_button.set_position(300, 300);
 
 	for( int i = 0; i < KEY_PRESS_DEFAULT; i++){
@@ -68,7 +69,7 @@ void MainMenu::renderTexture(){
 		sprite_sheets[current_queue[0]].render(current_queue[1], current_queue[2], current_queue[3]);
 	}
 
-	test_text.render( 100, 100 );
+	test_text.render( 300, 300 );
 
 	_test_button.draw_element();
 
@@ -143,9 +144,7 @@ void MainMenu::eventHandler( SDL_Event &event, bool &quit ){
 	}
 	if(key_pressed[KEY_PRESS_S]){
 
-
 		create_queue( &queue, 0, 0, 0, 2);
-
 	}
 	if(key_pressed[KEY_PRESS_D]){
 

@@ -21,7 +21,7 @@ bool init( SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer ){
 		}
 		else{
 
-			targetRenderer = SDL_CreateRenderer( targetWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+			targetRenderer = SDL_CreateRenderer( targetWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_TEXTUREACCESS_TARGET);
 
 			if ( targetRenderer == NULL ){
 
