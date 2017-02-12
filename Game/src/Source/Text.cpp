@@ -107,5 +107,16 @@ void Text::update_font(){
 	_font = TTF_OpenFont( _font_path.c_str(), _font_size);
 }
 
+void Text::set_text( std::string text){
+	_text = text;
+}
+
+
+
+
+
+
+
+
 
 

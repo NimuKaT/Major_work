@@ -25,9 +25,7 @@
 								<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.1974947661" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.908786735" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.313613792" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDL/SDL2-2.0.5/include/SDL2}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDL/SDL2_image-2.0.1/include/SDL2}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDL/SDL2_ttf-2.0.14/include/SDL2}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\msys64\mingw32\include\SDL2&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.1018634646" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1779801630" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -mwindows" valueType="string"/>
@@ -50,9 +48,7 @@
 									<listOptionValue builtIn="false" value="SDL2_ttf"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.583203890" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDL/SDL2-2.0.5/lib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDL/SDL2_image-2.0.1/lib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDL/SDL2_ttf-2.0.14/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\msys64\mingw32\lib&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.779382834" name="Linker flags" superClass="gnu.cpp.link.option.flags" useByScannerDiscovery="false" value="-static-libgcc -static-libstdc++" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.277790959" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

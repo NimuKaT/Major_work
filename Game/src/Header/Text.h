@@ -20,6 +20,7 @@ public:
 	bool set_font(std::string);
 	void set_font_size(int);
 	void set_space_size( int, int );
+	void set_text( std::string );
 	void update_font();
 
 private:

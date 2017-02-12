@@ -130,6 +130,25 @@ void MainMenu::eventHandler( SDL_Event &event, bool &quit ){
 					break;
 				}
 			}
+		}
+
+		else if( event.type == SDL_MOUSEBUTTONUP ){
+			if( event.button.button == SDL_BUTTON_LEFT ){
+
+			}
+		}
+
+		else if( event.type == SDL_MOUSEBUTTONDOWN ){
+			if( event.button.button == SDL_BUTTON_LEFT ){
+
+			}
+
+		}
+
+		else if (event.type == SDL_MOUSEMOTION ){
+			int mouse_x, mouse_y;
+			SDL_GetMouseState( &mouse_x, &mouse_y );
+			std::cout << mouse_x << " " << mouse_y << std::endl;
 
 		}
 	}
