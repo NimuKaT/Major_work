@@ -146,9 +146,8 @@ void MainMenu::eventHandler( SDL_Event &event, bool &quit ){
 		}
 
 		else if (event.type == SDL_MOUSEMOTION ){
-			int mouse_x, mouse_y;
-			SDL_GetMouseState( &mouse_x, &mouse_y );
-			std::cout << mouse_x << " " << mouse_y << std::endl;
+			SDL_GetMouseState( &_mouse_x, &_mouse_y );
+			std::cout << _mouse_x << " " << _mouse_y << std::endl;
 
 		}
 	}

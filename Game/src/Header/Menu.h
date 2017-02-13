@@ -20,6 +20,9 @@ public:
 	virtual void renderTexture() = 0;
 	virtual void eventHandler (SDL_Event &, bool &) = 0;
 
+protected:
+	int _mouse_x, _mouse_y;
+
 };
 
 

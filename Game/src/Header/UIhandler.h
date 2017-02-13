@@ -22,6 +22,8 @@ public:
 	void set_position( int, int );
 	bool is_over_element( int, int );
 	void draw_element();
+	void set_padding( int = 0 );
+	void set_padding( int = 0, int = 0 );
 
 private:
 	bool is_hidden;
@@ -32,6 +34,9 @@ private:
 	std::string _element_text;
 	int _clip_number;
 	int _x_position, _y_position;
+	int _width, _height;
+	int _padding_both;
+	int _padding_x, _padding_y;
 
 };
 

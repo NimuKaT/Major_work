@@ -25,20 +25,20 @@ public:
 	void create_blank_texture(int, int);
 	void get_renderer( SDL_Renderer* );
 
-	SDL_Texture* objectTexture;
-	std::vector< SDL_Rect > sprite_clips;
-	SDL_Renderer* _renderer_ptr;
-	int _width, _height;
+
 
 private:
 	void loadTexture();
 	void clip_from_texture();
-
-
-
+	bool _is_renderable();
 
 	std::string image_path;
 
+protected:
+	SDL_Texture* objectTexture;
+	std::vector< SDL_Rect > sprite_clips;
+	SDL_Renderer* _renderer_ptr;
+	int _width, _height;
 
 
 };

@@ -14,6 +14,7 @@ Texture::Texture(){
 	_height = 0;
 }
 
+//TODO move somewhere else or change stuff
 void add_rect_to_vector(std::vector<SDL_Rect> &rect_vector, int x, int y, int h, int w){
 	SDL_Rect temp_rect;
 	temp_rect.x = x;
@@ -23,6 +24,7 @@ void add_rect_to_vector(std::vector<SDL_Rect> &rect_vector, int x, int y, int h,
 	rect_vector.push_back(temp_rect);
 };
 
+//TODO make path and clips independent of init
 void Texture::init(SDL_Renderer* targetRenderer, std::string path, std::vector<SDL_Rect> clips) {
 	_renderer_ptr= targetRenderer;
 	image_path = path;
@@ -63,8 +65,8 @@ void Texture::loadTexture(){
 }
 
 void Texture::render( int x, int y, int clip_num ){
-//	std::cout << "rendering : "<< image_path << std::endl;
-	if (!sprite_clips.empty()){
+//	std::cout << "rendering : "<< image_path << std::endl; logPoint
+	if ( _is_renderable() ){
 		SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
 		SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
 		SDL_Rect dstrect = { x, y, sprite_clips[clip_num].w, sprite_clips[clip_num].h };
@@ -74,7 +76,6 @@ void Texture::render( int x, int y, int clip_num ){
 }
 
 void Texture::set_as_render_target(){
-
 	//makes the target of render this texture
 	SDL_SetRenderTarget( _renderer_ptr, objectTexture );
 }
@@ -102,11 +103,24 @@ void Texture::clip_from_texture(){
 	SDL_QueryTexture(objectTexture, NULL, NULL, &_width, &_height);
 	sprite_clips.clear();
 	add_rect_to_vector(sprite_clips, 0, 0, _height, _width);
-	std::cout << "creating clip" << std::endl;
+//	std::cout << "creating clip" << std::endl; logPoint
 }
 
 void Texture::get_renderer(	SDL_Renderer* targetRenderer ){
 	_renderer_ptr = targetRenderer;
 }
 
+//TODO output statements when error occurs
+bool Texture::_is_renderable(){
+	bool renderable = false;
 
+	if( _renderer_ptr != NULL ){
+		if( objectTexture != NULL ){
+			if( !sprite_clips.empty() ){
+				renderable = true;
+			}
+		}
+	}
+
+	return renderable;
+}

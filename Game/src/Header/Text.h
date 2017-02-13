@@ -22,6 +22,7 @@ public:
 	void set_space_size( int, int );
 	void set_text( std::string );
 	void update_font();
+	void set_alpha( Uint8 );
 
 private:
 	std::string _font_path;
@@ -30,6 +31,8 @@ private:
 	SDL_Color _color;
 	int _font_size;
 	SDL_Rect _srcrect;
+
+	bool _is_renderable();
 };
 
 #endif /* TEXT_H_ */
