@@ -17,7 +17,7 @@ void create_queue( std::vector< std::vector< int > >* queue, int spire_number, i
 	new_queue.push_back(clip_number);
 	queue->push_back(new_queue);
 }
-
+//TODO Memory allocator, deallocator and deconstructor
 MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
 	_renderer = targetRenderer;
@@ -46,7 +46,7 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
 	std::string paths;
 
-	for( int i = 0; i < spritePaths.size(); i++){
+	for( Uint8 i = 0; i < spritePaths.size(); i++){
 		Texture temp_texture;
 		temp_texture.init( targetRenderer, spritePaths[i], clips);
 		sprite_sheets.push_back(temp_texture);

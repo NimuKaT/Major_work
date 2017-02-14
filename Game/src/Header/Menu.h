@@ -14,6 +14,12 @@
 #include "Text.h"
 #include "UIhandler.h"
 
+struct render_queue{
+	int sprite_number;
+	int x, y;
+	int clip_number;
+};
+
 class MenuManager{
 public:
 	virtual ~MenuManager() = 0;

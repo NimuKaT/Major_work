@@ -114,7 +114,7 @@ int main( int argc, char* args[] ){
 
 	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window, mainRenderer) ){
-
+//TODO int* for menu number
 		MenuManager* menus[] = {new MainMenu(mainRenderer)};
 
 		Timer frame_rate_cap;

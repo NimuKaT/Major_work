@@ -32,4 +32,7 @@ enum KEY_PRESS {
 
 };
 
+//TODO enum for menu number
+//TODO remove basic arrays and pointers
+
 #endif /* GLOBAL_H_ */
