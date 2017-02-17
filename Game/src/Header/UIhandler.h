@@ -25,7 +25,7 @@ public:
 	void set_padding( int = 0 );
 	void set_padding( int = 0, int = 0 );
 
-private:
+protected:
 	bool is_hidden;
 	SDL_Renderer* _renderer_ptr;
 	Texture _element_texture;
@@ -39,6 +39,19 @@ private:
 	int _padding_x, _padding_y;
 
 };
+
+class UI_button : public UI_element{
+
+};
+
+class UI_box : public UI_element{
+
+};
+
+class UI_slider_bar : public UI_element{
+
+};
+
 
 class UI_handler{
 public:

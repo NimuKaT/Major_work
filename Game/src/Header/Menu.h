@@ -15,14 +15,16 @@
 #include "UIhandler.h"
 
 struct render_queue{
-	int sprite_number;
+	int sprite_num;
 	int x, y;
-	int clip_number;
+	int clip_num;
 };
 
 class MenuManager{
 public:
 	virtual ~MenuManager() = 0;
+//	virtual void load_data() = 0;
+//	virtual void unload_data() = 0;
 	virtual void renderTexture() = 0;
 	virtual void eventHandler (SDL_Event &, bool &) = 0;
 
@@ -38,7 +40,7 @@ public:
 	void renderTexture();
 	void eventHandler(SDL_Event &, bool &);
 
-	std::vector< std::vector< int > > queue;
+	std::vector< render_queue > queue;
 	std::vector< Texture> sprite_sheets;
 	SDL_Renderer* _renderer;
 	std::vector< std::string > spritePaths;

@@ -28,7 +28,7 @@ public:
 
 
 private:
-	void loadTexture();
+	void load_texture();
 	void clip_from_texture();
 	bool _is_renderable();
 

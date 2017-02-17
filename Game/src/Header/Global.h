@@ -12,6 +12,8 @@
 #include <string>
 #include <iostream>
 #include <stdio.h>
+#include <memory>
+#include <forward_list>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -32,7 +34,14 @@ enum KEY_PRESS {
 
 };
 
-//TODO enum for menu number
+enum MENU_ID{
+	MAIN_MENU,
+	OPTIONS_MENU,
+	STAGE_SELECT_MENU,
+	GAME_MENU,
+	DEFAULT_MENU
+};
+
 //TODO remove basic arrays and pointers
 
 #endif /* GLOBAL_H_ */

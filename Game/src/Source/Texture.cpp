@@ -24,23 +24,22 @@ void add_rect_to_vector(std::vector<SDL_Rect> &rect_vector, int x, int y, int h,
 	rect_vector.push_back(temp_rect);
 };
 
-//TODO make path and clips independent of init
 void Texture::init(SDL_Renderer* targetRenderer, std::string path, std::vector<SDL_Rect> clips) {
 	_renderer_ptr= targetRenderer;
 	image_path = path;
-	loadTexture();
+	load_texture();
 	if(!clips.empty()){
 		sprite_clips.swap(clips);
 	}
 	else{
 		clip_from_texture();
-		std::cout << "clips are empty\n" << _width << "\n" << _height <<std::endl;
+//		std::cout << "clips are empty\n" << _width << "\n" << _height <<std::endl;	logPoint
 	}
 
 
 };
 
-void Texture::loadTexture(){
+void Texture::load_texture(){
 
 	//Output as final texture
 	objectTexture = NULL;
@@ -59,7 +58,7 @@ void Texture::loadTexture(){
 		}
 
 		SDL_FreeSurface(loadedSurface);
-		std::cout << "completed loading : " << image_path << std::endl;
+//		std::cout << "completed loading : " << image_path << std::endl;	logPoint
 
 	}
 }
@@ -110,7 +109,6 @@ void Texture::get_renderer(	SDL_Renderer* targetRenderer ){
 	_renderer_ptr = targetRenderer;
 }
 
-//TODO output statements when error occurs
 bool Texture::_is_renderable(){
 	bool renderable = false;
 
@@ -119,7 +117,17 @@ bool Texture::_is_renderable(){
 			if( !sprite_clips.empty() ){
 				renderable = true;
 			}
+			else{
+				std::cout << "Could not render image. Clips are missing.\n" << std::endl;
+			}
 		}
+		else{
+			std::cout << "Could not render image. Texture has not been loaded.\n" << std::endl;
+
+		}
+	}
+	else{
+		std::cout << "Could not render image. Renderer pointer has not been passed.\n" << std::endl;
 	}
 
 	return renderable;

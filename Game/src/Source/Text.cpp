@@ -16,7 +16,6 @@ Text::Text(){
 	set_color( 0x00, 0x00, 0x00, 0x00 );
 }
 
-//TODO make font, text, clip intialised out of init
 void Text::init(SDL_Renderer* target_renderer, std::string font, std::string text, SDL_Rect clip){
 	_renderer_ptr= target_renderer;
 	_srcrect = clip;
@@ -29,7 +28,6 @@ void Text::init(SDL_Renderer* target_renderer, std::string font, std::string tex
 	create_blank_texture( _width, _height );
 
 }
-
 
 void Text::render( int x, int y ){
 
@@ -124,14 +122,29 @@ void Text::set_text( std::string text){
 	_text = text;
 }
 
-//TODO output statements when error occurs
 bool Text::_is_renderable(){
 	bool renderable = false;
 
 	if( _text != std::string() ){
-		if( _font_size > 0){
-			renderable = true;
+		if( _font_path != std::string() ){
+			if( _font_size > 0){
+				if( _width > 0 && _height > 0 ){
+					renderable = true;
+				}
+				else{
+					std::cout << "Could not render text. Texture width or height is 0.\n" << std::endl;
+				}
+			}
+			else{
+				std::cout << "Could not render text. Font size is 0.\n" << std::endl;
+			}
 		}
+		else{
+			std::cout << "Could not render text. Font path does not exist.\n" << std::endl;
+		}
+	}
+	else{
+		std::cout << "Could not render text. Text is empty.\n" << std::endl;
 	}
 	return renderable;
 }

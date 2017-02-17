@@ -9,12 +9,8 @@
 
 inline MenuManager::~MenuManager(){};
 
-void create_queue( std::vector< std::vector< int > >* queue, int spire_number, int x_coordinate, int y_coordinate, int clip_number ){
-	std::vector< int > new_queue;
-	new_queue.push_back(spire_number);
-	new_queue.push_back(x_coordinate);
-	new_queue.push_back(y_coordinate);
-	new_queue.push_back(clip_number);
+void create_queue( std::vector< render_queue >* queue, int sprite_number, int x_coordinate, int y_coordinate, int clip_number ){
+	render_queue new_queue = {sprite_number, x_coordinate, y_coordinate, clip_number};
 	queue->push_back(new_queue);
 }
 //TODO Memory allocator, deallocator and deconstructor
@@ -66,7 +62,7 @@ void MainMenu::renderTexture(){
 
 	main_menu_background.render();
 	for( auto &current_queue : queue){
-		sprite_sheets[current_queue[0]].render(current_queue[1], current_queue[2], current_queue[3]);
+		sprite_sheets[current_queue.sprite_num].render(current_queue.x, current_queue.y, current_queue.clip_num);
 	}
 
 	test_text.render( 300, 300 );
@@ -147,7 +143,7 @@ void MainMenu::eventHandler( SDL_Event &event, bool &quit ){
 
 		else if (event.type == SDL_MOUSEMOTION ){
 			SDL_GetMouseState( &_mouse_x, &_mouse_y );
-			std::cout << _mouse_x << " " << _mouse_y << std::endl;
+//			std::cout << _mouse_x << " " << _mouse_y << std::endl;	logPoint
 
 		}
 	}
