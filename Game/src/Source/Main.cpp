@@ -128,7 +128,7 @@ int main( int argc, char* args[] ){
 
 		while( !quit ){
 
-			menus[0]->eventHandler(event, quit);
+			menus[0]->event_Handler(event, quit);
 
 			/*if( TEMP_FRAME_RATE_CAP <= frame_rate_cap.get_time_elapsed()){
 				SDL_Delay(TEMP_FRAME_RATE_CAP - frame_rate_cap.get_time_elapsed());
@@ -147,7 +147,7 @@ int main( int argc, char* args[] ){
 
 //			test_balls.render(2);
 
-			menus[0]->renderTexture();
+			menus[0]->render_Texture();
 
 			//Push to screen
 			SDL_RenderPresent( mainRenderer );

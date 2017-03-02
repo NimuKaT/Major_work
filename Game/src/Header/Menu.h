@@ -25,20 +25,20 @@ public:
 	virtual ~MenuManager() = 0;
 //	virtual void load_data() = 0;
 //	virtual void unload_data() = 0;
-	virtual void renderTexture() = 0;
-	virtual void eventHandler (SDL_Event &, bool &) = 0;
+	virtual void render_Texture() = 0;
+	virtual void event_Handler (SDL_Event &, bool &) = 0;
 
 protected:
 	int _mouse_x, _mouse_y;
+	bool key_pressed[KEY_PRESS_DEFAULT];
 
 };
-
 
 class MainMenu : public MenuManager{
 public:
 	MainMenu( SDL_Renderer* );
-	void renderTexture();
-	void eventHandler(SDL_Event &, bool &);
+	void render_Texture();
+	void event_Handler(SDL_Event &, bool &);
 
 	std::vector< render_queue > queue;
 	std::vector< Texture> sprite_sheets;
@@ -51,13 +51,11 @@ public:
 private:
 	UI_element _test_button;
 	Texture main_menu_background;
-	bool key_pressed[KEY_PRESS_DEFAULT];
 
 
 
 
 };
-
 
 
 #endif /* MENU_H_ */

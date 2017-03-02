@@ -58,7 +58,7 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
 };
 
-void MainMenu::renderTexture(){
+void MainMenu::render_Texture(){
 
 	main_menu_background.render();
 	for( auto &current_queue : queue){
@@ -73,7 +73,7 @@ void MainMenu::renderTexture(){
 
 };
 
-void MainMenu::eventHandler( SDL_Event &event, bool &quit ){
+void MainMenu::event_Handler( SDL_Event &event, bool &quit ){
 	while( SDL_PollEvent( &event ) != 0 ){
 		if(event.type == SDL_QUIT){
 				quit = true;
