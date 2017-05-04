@@ -20,13 +20,27 @@ public:
 	SDL_Rect get_rect();
 	std::vector< SDL_Rect > get_render_queue();
 
+protected:
 	// class variables
 
+	float true_x_position, true_y_position;
 	int x_position, y_position;
 	int sprite_frame;
-	std::vector<int> associated_sprite_queues[];
+	std::vector<int> associated_sprite_queues;
 
 
+
+};
+
+class Player : public Object{
+public:
+	Player();
+	~Player();
+	void update();
+	void get_movement( int, int );
+
+private:
+	bool input_states[5];
 
 };
 

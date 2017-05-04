@@ -73,7 +73,7 @@ void MainMenu::render_Texture(){
 
 };
 
-void MainMenu::event_Handler( SDL_Event &event, bool &quit ){
+void MenuManager::event_Handler( SDL_Event &event, bool &quit ){
 	while( SDL_PollEvent( &event ) != 0 ){
 		if(event.type == SDL_QUIT){
 				quit = true;
@@ -147,6 +147,10 @@ void MainMenu::event_Handler( SDL_Event &event, bool &quit ){
 
 		}
 	}
+	update_logic();
+};
+
+void MainMenu::update_logic(){
 
 	if(key_pressed[KEY_PRESS_W]){
 
@@ -167,8 +171,5 @@ void MainMenu::event_Handler( SDL_Event &event, bool &quit ){
 	if(key_pressed[KEY_PRESS_DEFAULT]){
 
 	}
-
-
-
-};
+}
 

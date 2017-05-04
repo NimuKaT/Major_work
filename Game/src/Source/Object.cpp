@@ -7,7 +7,7 @@
 
 #include "../Header/Object.h"
 
-/*
+
 Object::Object() {
 	// TODO Auto-generated constructor stub
 	x_position = 0;
@@ -22,4 +22,20 @@ SDL_Rect Object::get_rect(){
 	SDL_Rect object_position = { x_position, y_position, 0, 0 };
 	return object_position;
 }
-*/
+
+
+Player::Player(){
+
+}
+
+Player::~Player(){
+
+}
+
+void Player::update(){
+
+}
+
+void Player::get_movement( int x, int y){
+
+}

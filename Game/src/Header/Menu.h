@@ -26,7 +26,8 @@ public:
 //	virtual void load_data() = 0;
 //	virtual void unload_data() = 0;
 	virtual void render_Texture() = 0;
-	virtual void event_Handler (SDL_Event &, bool &) = 0;
+	void event_Handler (SDL_Event &, bool &);
+	virtual void update_logic() = 0;
 
 protected:
 	int _mouse_x, _mouse_y;
@@ -39,6 +40,7 @@ public:
 	MainMenu( SDL_Renderer* );
 	void render_Texture();
 	void event_Handler(SDL_Event &, bool &);
+	void update_logic();
 
 	std::vector< render_queue > queue;
 	std::vector< Texture> sprite_sheets;
