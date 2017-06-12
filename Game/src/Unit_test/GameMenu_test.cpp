@@ -5,5 +5,5 @@
  *      Author: Imukat
  */
 
-#include "C:/Users/Takumi/Desktop/Major_work_folder/Major_work/Game/src/Header/GameMenu.h"
+#include "../Header/GameMenu.h"
 
