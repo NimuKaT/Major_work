@@ -115,10 +115,11 @@ int main( int argc, char* args[] ){
 	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window, mainRenderer) ){
 
-		std::unique_ptr< int > menu_ptr( int( MAIN_MENU ) );
+		std::unique_ptr< int > menu_ptr( new int( TEST_MENU ) );
 
 		std::vector< std::unique_ptr< MenuManager> > menus (DEFAULT_MENU);
 		menus[MAIN_MENU] = std::unique_ptr< MenuManager >( new MainMenu( mainRenderer ) );
+		menus[TEST_MENU] = std::unique_ptr< MenuManager >( new Test_Menu( mainRenderer ) );
 
 		Timer frame_rate_cap;
 		frame_rate_cap.start();
@@ -147,7 +148,7 @@ int main( int argc, char* args[] ){
 
 //			test_balls.render(2);
 
-			menus[0]->render_Texture();
+			menus[*menu_ptr.get()]->render_Texture();
 
 			//Push to screen
 			SDL_RenderPresent( mainRenderer );

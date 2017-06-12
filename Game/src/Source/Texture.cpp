@@ -7,12 +7,8 @@
 
 #include "../Header/Texture.h"
 
-Texture::Texture(){
-	objectTexture = NULL;
-	_renderer_ptr = NULL;
-	_width = 0;
-	_height = 0;
-}
+#define MIN_FACTOR 0.1f
+#define MAX_FACTOR 8.0f
 
 //TODO move somewhere else or change stuff
 void add_rect_to_vector(std::vector<SDL_Rect> &rect_vector, int x, int y, int h, int w){
@@ -23,6 +19,15 @@ void add_rect_to_vector(std::vector<SDL_Rect> &rect_vector, int x, int y, int h,
 	temp_rect.w = w;
 	rect_vector.push_back(temp_rect);
 };
+
+Texture::Texture(){
+	objectTexture = NULL;
+	_renderer_ptr = NULL;
+	_width = 0;
+	_height = 0;
+	_textureAlpha = 255;
+	_scale_factor = 1.0;
+}
 
 void Texture::init(SDL_Renderer* targetRenderer, std::string path, std::vector<SDL_Rect> clips) {
 	_renderer_ptr= targetRenderer;
@@ -68,7 +73,7 @@ void Texture::render( int x, int y, int clip_num ){
 	if ( _is_renderable() ){
 		SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
 		SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
-		SDL_Rect dstrect = { x, y, sprite_clips[clip_num].w, sprite_clips[clip_num].h };
+		SDL_Rect dstrect = { x, y, floor( sprite_clips[clip_num].w * _scale_factor ), floor( sprite_clips[clip_num].h * _scale_factor ) };
 		SDL_RenderCopy(_renderer_ptr, objectTexture, &sprite_clips[clip_num], &dstrect );
 	}
 
@@ -84,8 +89,8 @@ void Texture::create_blank_texture(int width, int height){
 	SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor( _renderer_ptr, 0xFF, 0xFF, 0xFF, 0x00 );
-
 	objectTexture = SDL_CreateTexture( _renderer_ptr, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+
 	if( objectTexture == NULL){
 		std::cout << "Could not create blank texture. SDL_Error: %s\n" << SDL_GetError() << std::endl;
 	}
@@ -102,7 +107,7 @@ void Texture::clip_from_texture(){
 	SDL_QueryTexture(objectTexture, NULL, NULL, &_width, &_height);
 	sprite_clips.clear();
 	add_rect_to_vector(sprite_clips, 0, 0, _height, _width);
-//	std::cout << "creating clip" << std::endl; logPoint
+
 }
 
 void Texture::get_renderer(	SDL_Renderer* targetRenderer ){
@@ -133,15 +138,17 @@ bool Texture::_is_renderable(){
 	return renderable;
 }
 
-
 void Texture::set_texture_alpha( Uint8 alpha ){
-	if( alpha >= 0 && alpha <= 255 ){
-		SDL_SetTextureAlphaMod( objectTexture, alpha);
-		_textureAlpha = alpha;
-	}
+	SDL_SetTextureAlphaMod( objectTexture, alpha);
+	_textureAlpha = alpha;
+
 }
 
-
+void Texture::set_scale( float factor ){
+	if ( factor > MIN_FACTOR && factor < MAX_FACTOR ){
+		_scale_factor = factor;
+	}
+}
 
 
 

@@ -23,8 +23,14 @@ private:
 	SDL_Renderer* _renderer_ptr = NULL;
 	Texture _texture_balls;
 
-	Uint8 texture_opacity = 0;
 
+
+
+
+// Test Variables
+	Uint8 texture_opacity = 200;
+	float scale_factor = SCREEN_HEIGHT/9;
+	int x, y;
 
 };
 

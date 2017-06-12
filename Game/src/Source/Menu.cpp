@@ -10,60 +10,18 @@
 //inline MenuManager::~MenuManager(){};
 
 void MenuManager::event_Handler( SDL_Event &event, bool &quit ){
+	int keyState = -1;
 	while( SDL_PollEvent( &event ) != 0 ){
 		if(event.type == SDL_QUIT){
 				quit = true;
 				break;
 		}
 		else if( event.type == SDL_KEYDOWN){
-			switch( event.key.keysym.sym ){
-				case SDLK_w:{
-//					std::cout << "w down" << std::endl;
-					key_pressed[KEY_PRESS_W] = true;
-					break;
-				}
-				case SDLK_a:{
-//					std::cout << "a down" << std::endl;
-					key_pressed[KEY_PRESS_A] = true;
-					break;
-				}
-				case SDLK_s:{
-//					std::cout << "s down" << std::endl;
-					key_pressed[KEY_PRESS_S] = true;
-					break;
-				}
-				case SDLK_d:{
-//					std::cout << "d down" << std::endl;
-					key_pressed[KEY_PRESS_D] = true;
-					break;
-				}
-			};
+			keyState = 1;
 		}
 		else if( event.type == SDL_KEYUP){
-			switch( event.key.keysym.sym ){
-				case SDLK_w:{
-//					std::cout << "w up" << std::endl;
-					key_pressed[KEY_PRESS_W] = false;
-					break;
-				}
-				case SDLK_a:{
-//					std::cout << "a up" << std::endl;
-					key_pressed[KEY_PRESS_A] = false;
-					break;
-				}
-				case SDLK_s:{
-//					std::cout << "s up" << std::endl;
-					key_pressed[KEY_PRESS_S] = false;
-					break;
-				}
-				case SDLK_d:{
-//					std::cout << "d up" << std::endl;
-					key_pressed[KEY_PRESS_D] = false;
-					break;
-				}
-			}
+			keyState = 0;
 		}
-
 		else if( event.type == SDL_MOUSEBUTTONUP ){
 			if( event.button.button == SDL_BUTTON_LEFT ){
 
@@ -76,11 +34,48 @@ void MenuManager::event_Handler( SDL_Event &event, bool &quit ){
 			}
 
 		}
-
 		else if (event.type == SDL_MOUSEMOTION ){
 			SDL_GetMouseState( &_mouse_x, &_mouse_y );
 //			std::cout << _mouse_x << " " << _mouse_y << std::endl;	logPoint
 
+		}
+
+		if( keyState != -1){
+			switch( event.key.keysym.sym ){
+				case SDLK_w:{
+					key_pressed[KEY_PRESS_W] = keyState;
+					break;
+				}
+				case SDLK_a:{
+					key_pressed[KEY_PRESS_A] = keyState;
+					break;
+				}
+				case SDLK_s:{
+					key_pressed[KEY_PRESS_S] = keyState;
+					break;
+				}
+				case SDLK_d:{
+					key_pressed[KEY_PRESS_D] = keyState;
+					break;
+				}
+				case SDLK_UP:{
+					key_pressed[KEY_PRESS_UP] = keyState;
+					break;
+				}
+				case SDLK_LEFT:{
+					key_pressed[KEY_PRESS_LEFT] = keyState;
+					break;
+				}
+				case SDLK_DOWN:{
+					key_pressed[KEY_PRESS_DOWN] = keyState;
+					break;
+				}
+				case SDLK_RIGHT:{
+					key_pressed[KEY_PRESS_RIGHT] = keyState;
+					break;
+				}
+			};
+			keyState = -1;
 		}
 	}
 	update_logic();
@@ -98,6 +93,9 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 	spritePaths.push_back("Assets/Images/test_balls.png");
 	spritePaths.push_back("Assets/Images/test_UI_element.png");
 
+	for( auto &key : key_pressed){
+		key = false;
+	}
 
 	std::string path_bg = "Assets/Images/temp_main_menu_background.png";
 	main_menu_background.init(targetRenderer, path_bg);

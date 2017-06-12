@@ -7,8 +7,16 @@
 
 #include "../Header/TestMenu.h"
 
+#define MIN_FACTOR 1.0f
+#define MAX_FACTOR 1024.0f
+
 Test_Menu::Test_Menu( SDL_Renderer* target_renderer){
 	_renderer_ptr = target_renderer;
+
+	for( auto &key : key_pressed){
+		key = false;
+	}
+
 	std::vector<SDL_Rect> clips;
 	add_rect_to_vector(clips, 0, 0, 100, 100);
 	add_rect_to_vector(clips, 0, 100, 100, 100);
@@ -17,34 +25,45 @@ Test_Menu::Test_Menu( SDL_Renderer* target_renderer){
 	add_rect_to_vector(clips, 0, 0, 150, 650);
 
 	_texture_balls.init( _renderer_ptr, "Assets/Images/test_balls.png", clips);
+	x = 1920;
+	y = 1080;
 }
 
 void Test_Menu::update_logic(){
 
 	if(key_pressed[KEY_PRESS_W]){
-		texture_opacity += 1;
+		y -= 5;
 
 	}
 	if(key_pressed[KEY_PRESS_A]){
-
+		x -= 5;
 
 	}
 	if(key_pressed[KEY_PRESS_S]){
-		texture_opacity -= 1;
+		y += 5;
 
 	}
 	if(key_pressed[KEY_PRESS_D]){
-
-
-	}
-	if(key_pressed[KEY_PRESS_DEFAULT]){
-
+		x += 5;
 
 	}
-
+	if(key_pressed[KEY_PRESS_UP]){
+		if ( scale_factor < MAX_FACTOR ){
+			scale_factor += 1;
+		}
+	}
+	if(key_pressed[KEY_PRESS_DOWN]){
+		if ( scale_factor > MIN_FACTOR ){
+			scale_factor -= 1;
+		}
+	}
 }
 
 void Test_Menu::render_Texture(){
-	_texture_balls.set_texture_alpha(texture_opacity);
-	_texture_balls.render( 300, 300, 1 );
+//	_texture_balls.set_scale( scale_factor );
+	SDL_RenderSetLogicalSize( _renderer_ptr, 16 * scale_factor, 9 * scale_factor);
+//	SDL_RenderSetScale( _renderer_ptr, scale_factor, scale_factor );
+
+//	_texture_balls.set_texture_alpha(texture_opacity);
+	_texture_balls.render( x, y, 1 );
 }

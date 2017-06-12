@@ -16,7 +16,7 @@ public:
 	Text();
 	void init(SDL_Renderer*, std::string, std::string, SDL_Rect);
 	void render( int, int );
-	void set_color( Uint8 = -1, Uint8 = -1, Uint8 = -1 , Uint8 = -1 );
+	void set_color( Uint8, Uint8, Uint8 , Uint8 );
 	bool set_font(std::string);
 	void set_font_size(int);
 	void set_space_size( int, int );
