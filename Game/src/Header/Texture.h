@@ -25,6 +25,8 @@ public:
 	void create_blank_texture(int, int);
 	void get_renderer( SDL_Renderer* );
 
+	void set_texture_alpha( Uint8 );
+
 
 
 private:
@@ -39,6 +41,7 @@ protected:
 	std::vector< SDL_Rect > sprite_clips;
 	SDL_Renderer* _renderer_ptr;
 	int _width, _height;
+	Uint8 _textureAlpha = 0;
 
 
 };

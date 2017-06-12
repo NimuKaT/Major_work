@@ -27,7 +27,6 @@ enum DEFAULT_CONTROLLS{
 class GameMenu : public MenuManager{
 public:
 	GameMenu( SDL_Renderer* );
-	~GameMenu();
 	void render_Texture();
 	void event_Handler( SDL_Event &, bool & );
 	void update_logic();

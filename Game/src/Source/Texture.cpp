@@ -132,3 +132,46 @@ bool Texture::_is_renderable(){
 
 	return renderable;
 }
+
+
+void Texture::set_texture_alpha( Uint8 alpha ){
+	if( alpha >= 0 && alpha <= 255 ){
+		SDL_SetTextureAlphaMod( objectTexture, alpha);
+		_textureAlpha = alpha;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -22,7 +22,7 @@ struct render_queue{
 
 class MenuManager{
 public:
-	virtual ~MenuManager() = 0;
+//	virtual ~MenuManager() = 0;
 //	virtual void load_data() = 0;
 //	virtual void unload_data() = 0;
 	virtual void render_Texture() = 0;

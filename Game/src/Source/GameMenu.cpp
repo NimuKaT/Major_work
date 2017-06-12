@@ -11,9 +11,6 @@ GameMenu::GameMenu( SDL_Renderer* main_renderer ) {
 	is_paused = false;
 }
 
-GameMenu::~GameMenu(){
-
-}
 
 void GameMenu::render_Texture(){
 
