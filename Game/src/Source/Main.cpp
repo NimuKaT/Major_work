@@ -115,7 +115,7 @@ int main( int argc, char* args[] ){
 	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window, mainRenderer) ){
 
-		std::unique_ptr< int > menu_ptr( new int( TEST_MENU ) );
+		std::unique_ptr< int > menu_ptr( new int( MAIN_MENU ) );
 
 		std::vector< std::unique_ptr< MenuManager> > menus (DEFAULT_MENU);
 		menus[MAIN_MENU] = std::unique_ptr< MenuManager >( new MainMenu( mainRenderer ) );

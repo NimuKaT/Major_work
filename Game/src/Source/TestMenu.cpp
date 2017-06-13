@@ -25,8 +25,8 @@ Test_Menu::Test_Menu( SDL_Renderer* target_renderer){
 	add_rect_to_vector(clips, 0, 0, 150, 650);
 
 	_texture_balls.init( _renderer_ptr, "Assets/Images/test_balls.png", clips);
-	x = 1920;
-	y = 1080;
+	x = 0;
+	y = 0;
 }
 
 void Test_Menu::update_logic(){

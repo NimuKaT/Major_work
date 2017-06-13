@@ -143,7 +143,7 @@ void MainMenu::render_Texture(){
 
 	test_text.render( 300, 300 );
 
-//	_test_button.draw_element();
+	_test_button.draw_element();
 
 	queue.clear();
 

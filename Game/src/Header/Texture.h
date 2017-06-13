@@ -26,6 +26,7 @@ public:
 	void get_renderer( SDL_Renderer* );
 	void set_texture_alpha( Uint8 );
 	void set_scale(float);
+	void setBlendMode( SDL_BlendMode );
 
 
 
@@ -43,6 +44,7 @@ protected:
 	int _width, _height;
 	Uint8 _textureAlpha;
 	float _scale_factor;
+	SDL_BlendMode _blendMode;
 
 
 };
