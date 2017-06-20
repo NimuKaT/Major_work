@@ -98,38 +98,37 @@ int main( int argc, char* args[] ){
 
 //TODO add vector for textures
 
-//	Asset_path_loader image;
-
-
 	//The window that will be rendered to
 	SDL_Window* window = NULL;
 
 	//The window renderer
 	SDL_Renderer* mainRenderer = NULL;
 
-	//The texture currently displayed
-//	SDL_Texture* mainTexture = NULL;
-
-
-
 	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window, mainRenderer) ){
 
-		std::unique_ptr< int > menu_ptr( new int( MAIN_MENU ) );
+		Debugger console;
+		console.init( mainRenderer );
+		console.change_option("frame_rate", true);
 
+//		pointer to int for current menu
+		std::unique_ptr< int > menu_ptr( new int( TEST_MENU ) );
+
+//		Vector of Menu objects
 		std::vector< std::unique_ptr< MenuManager> > menus (DEFAULT_MENU);
 		menus[MAIN_MENU] = std::unique_ptr< MenuManager >( new MainMenu( mainRenderer ) );
 		menus[TEST_MENU] = std::unique_ptr< MenuManager >( new Test_Menu( mainRenderer ) );
 
+//		Frame capping
 		Timer frame_rate_cap;
 		frame_rate_cap.start();
 
+//		Core variables for the main loop
 		bool quit = false;
 		SDL_Event event;
 
 		while( !quit ){
 
-			menus[*menu_ptr.get()]->event_Handler(event, quit);
 
 			/*if( TEMP_FRAME_RATE_CAP <= frame_rate_cap.get_time_elapsed()){
 				SDL_Delay(TEMP_FRAME_RATE_CAP - frame_rate_cap.get_time_elapsed());
@@ -139,16 +138,13 @@ int main( int argc, char* args[] ){
 			//Clear screen
 			SDL_RenderClear( mainRenderer );
 
+//			Logs user input
+			menus[*menu_ptr.get()]->event_Handler(event, quit);
 
-//			std::cout << loadTexture(mainRenderer, "Assets//Images//player.png") << std::endl;
-
-//			SDL_RenderCopy( mainRenderer, mainTexture, NULL, NULL );
-
-			//SDL_RenderCopy(mainRenderer, loadTexture(mainRenderer, "Assets//Images//player.png"), NULL, &a);
-
-//			test_balls.render(2);
-
+//			Renders graphics according to logic
 			menus[*menu_ptr.get()]->render_Texture();
+
+			console.render();
 
 			//Push to screen
 			SDL_RenderPresent( mainRenderer );

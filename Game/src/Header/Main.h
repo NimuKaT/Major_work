@@ -15,6 +15,7 @@
 #include "Assetpathloader.h"
 #include "Timer.h"
 #include "TestMenu.h"
+#include "Debugger.h"
 
 
 

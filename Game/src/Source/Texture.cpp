@@ -27,18 +27,24 @@ Texture::Texture(){
 	_height = 0;
 	_textureAlpha = 255;
 	_scale_factor = 1.0;
+	_blendMode = SDL_BLENDMODE_ADD;
 }
 
 void Texture::init(SDL_Renderer* targetRenderer, std::string path, std::vector<SDL_Rect> clips) {
 	_renderer_ptr= targetRenderer;
 	image_path = path;
-	load_texture();
-	if(!clips.empty()){
-		sprite_clips.swap(clips);
+	if( path != std::string() ){
+		load_texture();
+		if(!clips.empty()){
+			sprite_clips.swap(clips);
+		}
+		else{
+			clip_from_texture();
+//			std::cout << "clips are empty\n" << _width << "\n" << _height <<std::endl;	logPoint
+		}
 	}
 	else{
-		clip_from_texture();
-//		std::cout << "clips are empty\n" << _width << "\n" << _height <<std::endl;	logPoint
+		create_blank_texture( 100, 100);
 	}
 
 
@@ -53,7 +59,7 @@ void Texture::load_texture(){
 	SDL_Surface* loadedSurface = IMG_Load( image_path.c_str() );
 
 	if( loadedSurface == NULL ){
-		printf( "Unable to load image. SDL_image Error: %s\n", IMG_GetError() );
+		printf( "Unable to load image. SDL_image Error: %s\n%s\n", IMG_GetError(), image_path.c_str());
 	}
 	else{
 		objectTexture = SDL_CreateTextureFromSurface( _renderer_ptr, loadedSurface );

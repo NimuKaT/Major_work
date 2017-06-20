@@ -18,9 +18,9 @@ Timer::Timer() {
 inline Timer::~Timer(){};
 
 void Timer::start(){
+	is_started = true;
 	if( !is_paused ){
 		init_time = SDL_GetTicks();
-		is_started = true;
 	}
 	else{
 		init_time = SDL_GetTicks() - passed_time;
