@@ -61,7 +61,7 @@ void Test_Menu::update_logic(){
 
 void Test_Menu::render_Texture(){
 //	_texture_balls.set_scale( scale_factor );
-	SDL_RenderSetLogicalSize( _renderer_ptr, 16 * scale_factor, 9 * scale_factor);
+//	SDL_RenderSetLogicalSize( _renderer_ptr, 16 * scale_factor, 9 * scale_factor);
 //	SDL_RenderSetScale( _renderer_ptr, scale_factor, scale_factor );
 
 //	_texture_balls.set_texture_alpha(texture_opacity);

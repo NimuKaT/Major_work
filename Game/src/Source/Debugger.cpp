@@ -15,19 +15,22 @@ void Debugger::init(SDL_Renderer* renderer_ptr){
 	fps_text = "fps: 0";
 
 	SDL_Rect fps_box;
-	fps_box.w = 75;
-	fps_box.h = 30;
+	fps_box.w = 150;
+	fps_box.h = 60;
 	fps_box.x = 0;
 	fps_box.y = 0;
 
 	frame_rate.init( renderer_ptr, "Sans", fps_text, fps_box);
 	frame_rate.set_color( 0, 0, 0, 150);
-	frame_rate.set_font_size(20);
-	frame_rate.set_text(fps_text);
+	frame_rate.set_font_size(40);
 
 //	Mouse position texture
 
-
+	mouse_text = "x: 	y: ";
+	SDL_Rect mouse_box {0, 0, 320, 60};
+	mouse_location.init( renderer_ptr, "Sans", mouse_text, mouse_box );
+	mouse_location.set_color( 0, 0, 0, 255 );
+	mouse_location.set_font_size(40);
 
 //	Intitialise fps timer
 
@@ -66,4 +69,18 @@ void Debugger::render(){
 		frame_count++;
 	}
 
+	if( options[MOUSE_LOCATION] ){
+//		SDL_GetMouseState( &mouse_x, &mouse_y );
+		mouse_text = "x: " + std::to_string(mouse_x) + " y: " + std::to_string(mouse_y);
+		mouse_location.set_text( mouse_text );
+		mouse_location.render( 0, 60 );
+
+	}
+
 }
+
+void Debugger::getMousePos( std::tuple<int,int> mousePos ){
+	mouse_x = std::get<0>(mousePos);
+	mouse_y = std::get<1>(mousePos);
+}
+

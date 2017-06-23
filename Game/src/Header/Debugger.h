@@ -43,6 +43,7 @@ public:
 	void init( SDL_Renderer* );
 	void change_option( std::string, bool );
 	void render();
+	void getMousePos( std::tuple<int,int> );
 
 };
 

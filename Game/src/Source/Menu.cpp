@@ -35,8 +35,10 @@ void MenuManager::event_Handler( SDL_Event &event, bool &quit ){
 
 		}
 		else if (event.type == SDL_MOUSEMOTION ){
-			SDL_GetMouseState( &_mouse_x, &_mouse_y );
-//			std::cout << _mouse_x << " " << _mouse_y << std::endl;	logPoint
+			_mouse_x = event.button.x;
+			_mouse_y = event.button.y;
+//			SDL_GetMouseState( &_mouse_x, &_mouse_y );
+//			std::cout << _mouse_x << " " << _mouse_y << std::endl;	//logPoint
 
 		}
 
@@ -81,6 +83,11 @@ void MenuManager::event_Handler( SDL_Event &event, bool &quit ){
 	update_logic();
 };
 
+std::tuple<int,int> MenuManager::returnMousePos(){
+	auto mousePos = std::make_tuple( _mouse_x, _mouse_y );
+
+	return mousePos;
+}
 
 void create_queue( std::vector< render_queue >* queue, int sprite_number, int x_coordinate, int y_coordinate, int clip_number ){
 	render_queue new_queue = {sprite_number, x_coordinate, y_coordinate, clip_number};

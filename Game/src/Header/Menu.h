@@ -28,6 +28,7 @@ public:
 	virtual void render_Texture() = 0;
 	void event_Handler (SDL_Event &, bool &);
 	virtual void update_logic() = 0;
+	std::tuple<int,int> returnMousePos();
 
 protected:
 	int _mouse_x, _mouse_y;

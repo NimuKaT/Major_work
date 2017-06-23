@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <memory>
 #include <forward_list>
+#include <tuple>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

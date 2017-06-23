@@ -28,6 +28,7 @@ bool init( SDL_Window* &targetWindow, SDL_Renderer* &targetRenderer ){
 				printf( "Renderer could not be created. SDL Error: %s\n", SDL_GetError() );
 			}
 			else{
+				SDL_RenderSetLogicalSize( targetRenderer, 3840, 2160);
 
 				SDL_SetRenderDrawColor( targetRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				int imgFlags = IMG_INIT_PNG;
@@ -110,6 +111,7 @@ int main( int argc, char* args[] ){
 		Debugger console;
 		console.init( mainRenderer );
 		console.change_option("frame_rate", true);
+		console.change_option("mouse_location", true);
 
 //		pointer to int for current menu
 		std::unique_ptr< int > menu_ptr( new int( TEST_MENU ) );
@@ -143,6 +145,8 @@ int main( int argc, char* args[] ){
 
 //			Renders graphics according to logic
 			menus[*menu_ptr.get()]->render_Texture();
+
+			console.getMousePos(menus[*menu_ptr.get()]->returnMousePos());
 
 			console.render();
 
