@@ -33,6 +33,7 @@ void Timer::stop(){
 	if( is_started ){
 		init_time = 0;
 		is_started = false;
+		is_paused = false;
 	}
 }
 
@@ -57,7 +58,7 @@ void Timer::reset(){
 bool Timer::is_passed(Uint32 duration){
 	bool is_time_passed = false;
 	if( !is_paused && is_started ){
-		if ( init_time - SDL_GetTicks() >= duration ){
+		if (  SDL_GetTicks() - init_time >= duration ){
 			is_time_passed = true;
 		}
 	}

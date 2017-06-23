@@ -8,16 +8,29 @@
 #include "../Header/Debugger.h"
 
 void Debugger::init(SDL_Renderer* renderer_ptr){
+//	main debug log texture
 	debug_log.init( renderer_ptr);
 
-	fps_text = "";
+//	fps texture
+	fps_text = "fps: 0";
 
 	SDL_Rect fps_box;
-	fps_box.w = 64;
-	fps_box.h = 16;
+	fps_box.w = 75;
+	fps_box.h = 30;
+	fps_box.x = 0;
+	fps_box.y = 0;
+
 	frame_rate.init( renderer_ptr, "Sans", fps_text, fps_box);
-	frame_rate.set_color( 255, 255, 255, 150);
-	frame_rate.set_font_size(32);
+	frame_rate.set_color( 0, 0, 0, 150);
+	frame_rate.set_font_size(20);
+	frame_rate.set_text(fps_text);
+
+//	Mouse position texture
+
+
+
+//	Intitialise fps timer
+
 	fps_timer.start();
 }
 
@@ -38,19 +51,19 @@ void Debugger::change_option( std::string option_name, bool state ){
 
 void Debugger::render(){
 
-	printf(" called");
+
 	if( fps_timer.is_passed(1000) ){
 		fps_timer.reset();
-		fps_text = std::string( "fps: i");
+		fps_text = "fps: " + std::to_string( frame_count );
 		frame_rate.set_text( fps_text );
+		frame_count = 0;
 
-	}
-	else{
-		frame_count++;
 	}
 
 	if( options[FRAME_RATE] ){
+//		printf(fps_text.c_str());
 		frame_rate.render( 0, 0 );
+		frame_count++;
 	}
 
 }
