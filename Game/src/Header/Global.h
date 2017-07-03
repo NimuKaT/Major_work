@@ -20,6 +20,13 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+static const std::string slash="\\";
+#else
+static const std::string slash="/";
+#endif
+
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 720/9*16;
 const int SCREEN_HEIGHT = 720;

@@ -7,26 +7,23 @@
 
 #include "../Header/Assetpathloader.h"
 
-Asset_path_loader::Asset_path_loader() {
-	// TODO Auto-generated constructor stub
-	imageFile = NULL;
-	imageFile = SDL_RWFromFile("src/image_path", "rt");
-	if(imageFile == NULL){
-		printf( "Paths of image files could not be loaded. SDL error: %s\n", SDL_GetError() );
-	}
-	else{
-//		std::cout << SDL_RWtell(imageFile) << std::endl;
+std::vector<std::string> get_options(){
+	std::vector<std::string> options;
+	std::string line;
+	std::ifstream infile;
+	char *path = SDL_GetBasePath();
+	std::string file_path = std::string(path) + "config.txt";
+	infile.open(file_path);
+	if( infile.is_open()){
+//		while (!infile.eof()){
+			std::getline(infile, line);
+//		}
+		infile.close();
 	}
 
-	/*std::ifstream image;
-	image.open("src/image_path");
-	if( image.is_open() ){
-		std::string currentLine;
-		while( std::getline( image, currentLine ) ){
-			std::cout << currentLine << std::endl;
-		}
-		image.close();
-	}
-*/
+
+
+
+
+	return options;
 }
-

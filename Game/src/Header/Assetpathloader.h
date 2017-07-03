@@ -13,14 +13,7 @@
 #include "Global.h"
 
 
-class Asset_path_loader{
-public:
-	Asset_path_loader();
-
-private:
-	SDL_RWops* imageFile;
-};
-
+std::vector<std::string> get_options();
 
 
 #endif /* ASSETOATHLOADER_H_ */
