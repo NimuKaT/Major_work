@@ -15,6 +15,7 @@
 #include <memory>
 #include <forward_list>
 #include <tuple>
+#include <array>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -42,6 +43,7 @@ enum KEY_PRESS {
 	KEY_PRESS_LEFT,
 	KEY_PRESS_DOWN,
 	KEY_PRESS_RIGHT,
+	KEY_PRESS_MB_1,
 	KEY_PRESS_DEFAULT
 
 };
@@ -54,6 +56,13 @@ enum MENU_ID{
 	TEST_MENU,
 	DEFAULT_MENU
 };
+
+struct Input_event{
+	std::array<bool, KEY_PRESS_DEFAULT> key_pressed;
+	int mouse_x;
+	int mouse_y;
+};
+
 
 //TODO remove basic arrays and pointers
 

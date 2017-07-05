@@ -14,13 +14,12 @@
 
 class Test_Menu : public MenuManager{
 public:
-	Test_Menu( SDL_Renderer* );
+	Test_Menu( SDL_Renderer*, Input_event* );
 	void render_Texture();
 	void update_logic();
 
 
 private:
-	SDL_Renderer* _renderer_ptr = NULL;
 	Texture _texture_balls;
 
 

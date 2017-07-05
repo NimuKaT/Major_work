@@ -10,8 +10,9 @@
 #define MIN_FACTOR 1.0f
 #define MAX_FACTOR 1024.0f
 
-Test_Menu::Test_Menu( SDL_Renderer* target_renderer){
-	_renderer_ptr = target_renderer;
+Test_Menu::Test_Menu( SDL_Renderer* target_renderer, Input_event* input_ptr){
+	 _renderer= target_renderer;
+	_input_data = input_ptr;
 
 	for( auto &key : key_pressed){
 		key = false;
@@ -24,35 +25,35 @@ Test_Menu::Test_Menu( SDL_Renderer* target_renderer){
 	add_rect_to_vector(clips, 100, 100, 100, 100);
 	add_rect_to_vector(clips, 0, 0, 150, 650);
 
-	_texture_balls.init( _renderer_ptr, "Assets\\Images\\test_balls.png", clips);
+	_texture_balls.init( _renderer, "Assets\\Images\\test_balls.png", clips);
 	x = 0;
 	y = 0;
 }
 
 void Test_Menu::update_logic(){
 
-	if(key_pressed[KEY_PRESS_W]){
+	if(_input_data->key_pressed[KEY_PRESS_W]){
 		y -= 5;
 
 	}
-	if(key_pressed[KEY_PRESS_A]){
+	if(_input_data->key_pressed[KEY_PRESS_A]){
 		x -= 5;
 
 	}
-	if(key_pressed[KEY_PRESS_S]){
+	if(_input_data->key_pressed[KEY_PRESS_S]){
 		y += 5;
 
 	}
-	if(key_pressed[KEY_PRESS_D]){
+	if(_input_data->key_pressed[KEY_PRESS_D]){
 		x += 5;
 
 	}
-	if(key_pressed[KEY_PRESS_UP]){
+	if(_input_data->key_pressed[KEY_PRESS_UP]){
 		if ( scale_factor < MAX_FACTOR ){
 			scale_factor += 1;
 		}
 	}
-	if(key_pressed[KEY_PRESS_DOWN]){
+	if(_input_data->key_pressed[KEY_PRESS_DOWN]){
 		if ( scale_factor > MIN_FACTOR ){
 			scale_factor -= 1;
 		}

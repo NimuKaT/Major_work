@@ -7,9 +7,11 @@
 
 #include "../Header/Debugger.h"
 
-void Debugger::init(SDL_Renderer* renderer_ptr){
+void Debugger::init(SDL_Renderer* renderer_ptr, Input_event* input_ptr){
 //	main debug log texture
 	debug_log.init( renderer_ptr);
+
+	input_data = input_ptr;
 
 //	fps texture
 	fps_text = "fps: 0";
@@ -71,7 +73,7 @@ void Debugger::render(){
 
 	if( options[MOUSE_LOCATION] ){
 //		SDL_GetMouseState( &mouse_x, &mouse_y );
-		mouse_text = "x: " + std::to_string(mouse_x) + " y: " + std::to_string(mouse_y);
+		mouse_text = "x: " + std::to_string(input_data->mouse_x) + " y: " + std::to_string(input_data->mouse_y);
 		mouse_location.set_text( mouse_text );
 		mouse_location.render( 0, 60 );
 

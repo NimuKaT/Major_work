@@ -94,6 +94,72 @@ void close(SDL_Window* targetWindow, SDL_Renderer* targetRenderer){
 	SDL_Quit();
 }
 
+//Logs users inputs
+void get_input( SDL_Event& event, Input_event& input_data, bool &quit){
+	while( SDL_PollEvent( &event ) != 0 ){
+		switch(event.type){
+			case SDL_QUIT:{
+				quit = true;
+				break;
+			}
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:{
+				switch( event.key.keysym.sym ){
+					case SDLK_w:{
+						input_data.key_pressed[KEY_PRESS_W] = event.key.state;
+						break;
+					}
+					case SDLK_a:{
+						input_data.key_pressed[KEY_PRESS_A] = event.key.state;
+						break;
+					}
+					case SDLK_s:{
+						input_data.key_pressed[KEY_PRESS_S] = event.key.state;
+						break;
+					}
+					case SDLK_d:{
+						input_data.key_pressed[KEY_PRESS_D] = event.key.state;
+						break;
+					}
+					case SDLK_UP:{
+						input_data.key_pressed[KEY_PRESS_UP] = event.key.state;
+						break;
+					}
+					case SDLK_LEFT:{
+						input_data.key_pressed[KEY_PRESS_LEFT] = event.key.state;
+						break;
+					}
+					case SDLK_DOWN:{
+						input_data.key_pressed[KEY_PRESS_DOWN] = event.key.state;
+						break;
+					}
+					case SDLK_RIGHT:{
+						input_data.key_pressed[KEY_PRESS_RIGHT] = event.key.state;
+						break;
+					}
+				}
+				break;
+			};
+			case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEBUTTONDOWN:{
+				switch(event.button.button){
+					case(SDL_BUTTON_LEFT):{
+						input_data.key_pressed[KEY_PRESS_MB_1] = event.button.state;
+					}
+				}
+				input_data.mouse_x = event.button.x;
+				input_data.mouse_y = event.button.y;
+				break;
+			}
+			case SDL_MOUSEMOTION:{
+				input_data.mouse_x = event.button.x;
+				input_data.mouse_y = event.button.y;
+				break;
+			}
+		}
+	}
+};
+
 //Main Loop
 int main( int argc, char* args[] ){
 
@@ -108,8 +174,14 @@ int main( int argc, char* args[] ){
 	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window, mainRenderer) ){
 
+//		Input event struct initialiser
+		Input_event input_data;
+		input_data.mouse_x = 0;
+		input_data.mouse_y = 0;
+
+//		Initialiser for the debug menu
 		Debugger console;
-		console.init( mainRenderer );
+		console.init( mainRenderer, &input_data );
 		console.change_option("frame_rate", true);
 		console.change_option("mouse_location", true);
 
@@ -118,16 +190,17 @@ int main( int argc, char* args[] ){
 
 //		Vector of Menu objects
 		std::vector< std::unique_ptr< MenuManager> > menus (DEFAULT_MENU);
-		menus[MAIN_MENU] = std::unique_ptr< MenuManager >( new MainMenu( mainRenderer ) );
-		menus[TEST_MENU] = std::unique_ptr< MenuManager >( new Test_Menu( mainRenderer ) );
+		menus[MAIN_MENU] = std::unique_ptr< MenuManager >( new MainMenu( mainRenderer, &input_data ) );
+		menus[TEST_MENU] = std::unique_ptr< MenuManager >( new Test_Menu( mainRenderer, &input_data ) );
 
-//		Frame capping
+//		Frame capping (not working)
 		Timer frame_rate_cap;
 		frame_rate_cap.start();
 
 //		Core variables for the main loop
 		bool quit = false;
 		SDL_Event event;
+
 
 		while( !quit ){
 
@@ -140,13 +213,13 @@ int main( int argc, char* args[] ){
 			//Clear screen
 			SDL_RenderClear( mainRenderer );
 
+			get_input(event, input_data, quit);
+
 //			Logs user input
-			menus[*menu_ptr.get()]->event_Handler(event, quit);
+			menus[*menu_ptr.get()]->update_logic();
 
 //			Renders graphics according to logic
 			menus[*menu_ptr.get()]->render_Texture();
-
-			console.getMousePos(menus[*menu_ptr.get()]->returnMousePos());
 
 			console.render();
 
