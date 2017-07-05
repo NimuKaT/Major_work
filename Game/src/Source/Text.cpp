@@ -8,7 +8,7 @@
 #include "../Header/Text.h"
 
 /* global initilisation of available fonts */
-const std::string SANS  = "Assets/Fonts/OpenSans-Regular.ttf";
+const std::string SANS  = "Assets\\Fonts\\OpenSans-Regular.ttf";
 
 Text::Text(){
 	_font_size = 0;

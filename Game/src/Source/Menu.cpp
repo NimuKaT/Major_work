@@ -97,14 +97,14 @@ void create_queue( std::vector< render_queue >* queue, int sprite_number, int x_
 MainMenu::MainMenu(SDL_Renderer* targetRenderer){
 
 	_renderer = targetRenderer;
-	spritePaths.push_back("Assets/Images/test_balls.png");
-	spritePaths.push_back("Assets/Images/test_UI_element.png");
+	spritePaths.push_back("Assets\\Images\\test_balls.png");
+	spritePaths.push_back("Assets\\Images\\test_UI_element.png");
 
 	for( auto &key : key_pressed){
 		key = false;
 	}
 
-	std::string path_bg = "Assets/Images/temp_main_menu_background.png";
+	std::string path_bg = "Assets\\Images\\temp_main_menu_background.png";
 	main_menu_background.init(targetRenderer, path_bg);
 	std::vector< SDL_Rect > clips ;
 	add_rect_to_vector(clips, 0, 0, 100, 100);
