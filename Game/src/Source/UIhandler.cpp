@@ -25,7 +25,7 @@ UI_element::UI_element(){
 }
 
 //TODO make text, element_decoration and clip_number independent of init_element
-bool UI_element::init_element(SDL_Renderer* target_renderer, std::string text, Texture* element_decoration, int clip_number){
+bool UI_element::init_element(SDL_Renderer* target_renderer, std::string text, SpriteSheet* element_decoration, int clip_number){
 
 	bool element_init = false;
 
@@ -33,12 +33,12 @@ bool UI_element::init_element(SDL_Renderer* target_renderer, std::string text, T
 	_decoration_ptr = element_decoration;
 	_element_text = text;
 	_clip_number = clip_number;
-	SDL_Rect decoration_clip = _decoration_ptr->get_rect(_clip_number);
+	SDL_Rect decoration_clip = _decoration_ptr->get_rect();
 	if( decoration_clip.w == 0 || decoration_clip.h == 0 ){
 		std::cout << "The clip number specified did not exist.\n" << std::endl;
 	}
 	else{
-		_element_texture.get_renderer( _renderer_ptr );
+		_element_texture.set_renderer( _renderer_ptr );
 		_element_texture.create_blank_texture( decoration_clip.w, decoration_clip.h );
 
 		SDL_Rect text_clip = { 0, 0, decoration_clip.w - 2*_padding_both, decoration_clip.h - 2*_padding_both};
@@ -49,7 +49,7 @@ bool UI_element::init_element(SDL_Renderer* target_renderer, std::string text, T
 
 		_element_texture.set_as_render_target();
 
-		_decoration_ptr->render( 0 ,0, _clip_number);
+		_decoration_ptr->render(0, 0, clip_number);
 		_text_texture.render( 5, 5 );
 
 
@@ -84,7 +84,7 @@ bool UI_element::is_over_element( int x_mouse, int y_mouse ){
 
 void UI_element::draw_element(){
 	if( !is_hidden){
-		_element_texture.render(_x_position, _y_position, 0);
+		_element_texture.render(_x_position, _y_position);
 	}
 }
 

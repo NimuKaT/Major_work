@@ -44,7 +44,7 @@ public:
 	void update_logic();
 
 	std::vector< render_queue > queue;
-	std::vector< Texture> sprite_sheets;
+	std::vector< SpriteSheet> sprite_sheets;
 
 	std::vector< std::string > spritePaths;
 	std::vector< SDL_Rect > clips;

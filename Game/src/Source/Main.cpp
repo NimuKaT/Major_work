@@ -166,6 +166,8 @@ int main( int argc, char* args[] ){
 
 //TODO add vector for textures
 
+	get_options();
+
 	//The window that will be rendered to
 	SDL_Window* window = NULL;
 
@@ -202,7 +204,6 @@ int main( int argc, char* args[] ){
 //		Core variables for the main loop
 		bool quit = false;
 		SDL_Event event;
-
 
 		while( !quit ){
 

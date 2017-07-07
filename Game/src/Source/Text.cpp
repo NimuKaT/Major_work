@@ -25,6 +25,7 @@ void Text::init(SDL_Renderer* target_renderer, std::string font, std::string tex
 
 	set_font(font);
 	update_font();
+
 	create_blank_texture( _width, _height );
 
 }
@@ -47,10 +48,10 @@ void Text::render( int x, int y ){
 
 			SDL_FreeSurface(loadedSurface);
 		}
-
+		TTF_SizeText(_font, _text.c_str(), &_width, &_height);
 		SDL_Rect dstrect = { x, y, _width, _height };
 
-		SDL_RenderCopy(_renderer_ptr, objectTexture, &_srcrect, &dstrect);
+		SDL_RenderCopy(_renderer_ptr, objectTexture, NULL, &dstrect);
 
 	}
 }

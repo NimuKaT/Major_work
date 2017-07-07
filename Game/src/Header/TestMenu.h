@@ -20,7 +20,7 @@ public:
 
 
 private:
-	Texture _texture_balls;
+	SpriteSheet _texture_balls;
 
 
 

@@ -17,7 +17,7 @@
 class UI_element{
 public:
 	UI_element();
-	bool init_element(SDL_Renderer*, std::string, Texture*, int);
+	bool init_element(SDL_Renderer*, std::string, SpriteSheet*, int);
 	void hide_element(bool);
 	void set_position( int, int );
 	bool is_over_element( int, int );
@@ -30,7 +30,7 @@ protected:
 	SDL_Renderer* _renderer_ptr;
 	Texture _element_texture;
 	Text _text_texture;
-	Texture* _decoration_ptr;
+	SpriteSheet* _decoration_ptr;
 	std::string _element_text;
 	int _clip_number;
 	int _x_position, _y_position;

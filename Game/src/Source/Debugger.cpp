@@ -9,18 +9,14 @@
 
 void Debugger::init(SDL_Renderer* renderer_ptr, Input_event* input_ptr){
 //	main debug log texture
-	debug_log.init( renderer_ptr);
+	debug_log.set_renderer( renderer_ptr);
 
 	input_data = input_ptr;
 
 //	fps texture
 	fps_text = "fps: 0";
 
-	SDL_Rect fps_box;
-	fps_box.w = 150;
-	fps_box.h = 60;
-	fps_box.x = 0;
-	fps_box.y = 0;
+	SDL_Rect fps_box {0,0,150,60};
 
 	frame_rate.init( renderer_ptr, "Sans", fps_text, fps_box);
 	frame_rate.set_color( 0, 0, 0, 150);

@@ -29,8 +29,8 @@ static const std::string slash="/";
 
 
 //Screen dimension constants
-const Uint32 SCREEN_WIDTH = 720/9*16;
-const Uint32 SCREEN_HEIGHT = 720;
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 const Uint32 TEMP_FRAME_RATE_CAP = 60;
 const Uint32 TEMP_TICK_PER_FRAME = 1000 / TEMP_FRAME_RATE_CAP;
 

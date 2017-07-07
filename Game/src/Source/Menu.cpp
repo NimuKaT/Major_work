@@ -21,12 +21,9 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer, Input_event* input_ptr){
 	spritePaths.push_back("Assets\\Images\\test_balls.png");
 	spritePaths.push_back("Assets\\Images\\test_UI_element.png");
 
-	for( auto &key : key_pressed){
-		key = false;
-	}
-
 	std::string path_bg = "Assets\\Images\\temp_main_menu_background.png";
-	main_menu_background.init(targetRenderer, path_bg);
+	main_menu_background.set_renderer(targetRenderer);
+	main_menu_background.set_image_path(path_bg);
 	std::vector< SDL_Rect > clips ;
 	add_rect_to_vector(clips, 0, 0, 100, 100);
 	add_rect_to_vector(clips, 0, 100, 100, 100);
@@ -35,8 +32,8 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer, Input_event* input_ptr){
 	add_rect_to_vector(clips, 0, 0, 150, 650);
 
 	SDL_Rect test_text_clip = {0, 0, 300, 200};
-	test_text.init(_renderer, "Sans", "Hello, World!", test_text_clip);
 
+	test_text.init(_renderer, "Sans", "Hello, World!", test_text_clip);
 	test_text.set_color( 0, 0, 0, 100 );
 	test_text.set_font_size(16);
 
@@ -47,31 +44,29 @@ MainMenu::MainMenu(SDL_Renderer* targetRenderer, Input_event* input_ptr){
 	std::string paths;
 
 	for( Uint8 i = 0; i < spritePaths.size(); i++){
-		Texture temp_texture;
-		temp_texture.init( targetRenderer, spritePaths[i], clips);
+		SpriteSheet temp_texture;
+		temp_texture.set_renderer( targetRenderer);
+		temp_texture.set_image_path(spritePaths[i]);
+		temp_texture.set_sprite_rects(clips);
 		sprite_sheets.push_back(temp_texture);
 	}
 
 	_test_button.init_element( _renderer, "Hello, World!", &sprite_sheets[1], 4 );
 	_test_button.set_position(300, 300);
 
-	for( int i = 0; i < KEY_PRESS_DEFAULT; i++){
-		key_pressed[i] = false;
-	}
-
 
 };
 
 void MainMenu::render_Texture(){
 
-	main_menu_background.render();
-	for( auto &current_queue : queue){
-		sprite_sheets[current_queue.sprite_num].render(current_queue.x, current_queue.y, current_queue.clip_num);
-	}
+	main_menu_background.render(0,0);
+//	for( auto &current_queue : queue){
+//		sprite_sheets[current_queue.sprite_num].render(current_queue.x, current_queue.y, current_queue.clip_num);
+//	}
 
 	test_text.render( 300, 300 );
 
-	_test_button.draw_element();
+//	_test_button.draw_element();
 
 	queue.clear();
 

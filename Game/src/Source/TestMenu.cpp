@@ -25,7 +25,9 @@ Test_Menu::Test_Menu( SDL_Renderer* target_renderer, Input_event* input_ptr){
 	add_rect_to_vector(clips, 100, 100, 100, 100);
 	add_rect_to_vector(clips, 0, 0, 150, 650);
 
-	_texture_balls.init( _renderer, "Assets\\Images\\test_balls.png", clips);
+	_texture_balls.set_renderer( _renderer);
+	_texture_balls.set_image_path("Assets\\Images\\test_balls.png");
+	_texture_balls.set_sprite_rects(clips);
 	x = 0;
 	y = 0;
 }
