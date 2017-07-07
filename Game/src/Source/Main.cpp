@@ -104,6 +104,7 @@ void get_input( SDL_Event& event, Input_event& input_data, bool &quit){
 			}
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:{
+
 				switch( event.key.keysym.sym ){
 					case SDLK_w:{
 						input_data.key_pressed[KEY_PRESS_W] = event.key.state;
@@ -176,6 +177,7 @@ int main( int argc, char* args[] ){
 
 //		Input event struct initialiser
 		Input_event input_data;
+		input_data.key_pressed.fill(false);
 		input_data.mouse_x = 0;
 		input_data.mouse_y = 0;
 

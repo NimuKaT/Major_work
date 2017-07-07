@@ -10,6 +10,23 @@
 
 #include "Global.h"
 
+class HitBox {
+public:
+	HitBox();
+	void set_position(int, int);
+	void set_size(int, int);
+	bool detect_collision(HitBox*);
+
+protected:
+	int x_,y_ = 0;
+	int width_,height_ = 0;
+
+protected:
+
+
+};
+
+
 
 class Object {
 public:

@@ -29,10 +29,10 @@ static const std::string slash="/";
 
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 720/9*16;
-const int SCREEN_HEIGHT = 720;
-const int TEMP_FRAME_RATE_CAP = 60;
-const int TEMP_TICK_PER_FRAME = 1000 / TEMP_FRAME_RATE_CAP;
+const Uint32 SCREEN_WIDTH = 720/9*16;
+const Uint32 SCREEN_HEIGHT = 720;
+const Uint32 TEMP_FRAME_RATE_CAP = 60;
+const Uint32 TEMP_TICK_PER_FRAME = 1000 / TEMP_FRAME_RATE_CAP;
 
 enum KEY_PRESS {
 	KEY_PRESS_W,
