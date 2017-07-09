@@ -190,7 +190,7 @@ int main( int argc, char* args[] ){
 		console.change_option("mouse_location", true);
 
 //		pointer to int for current menu
-		std::unique_ptr< int > menu_ptr( new int( TEST_MENU ) );
+		std::unique_ptr< int > menu_ptr( new int( INIT_MENU ) );
 
 //		Vector of Menu objects
 		std::vector< std::unique_ptr< MenuManager> > menus (DEFAULT_MENU);

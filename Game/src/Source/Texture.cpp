@@ -76,7 +76,7 @@ void Texture::load_texture(){
 }
 
 void Texture::render( int x, int y){
-//	std::cout << "rendering : "<< image_path << std::endl; logPoint
+//	std::cout << "rendering : "<< image_path << source_rect.w <<", "<< source_rect.h << std::endl; //logPoint
 	if ( _is_renderable() ){
 		SDL_SetRenderDrawBlendMode( _renderer_ptr, _blendMode );
 		SDL_Rect dstrect = { x, y, floor( source_rect.w * _scale_factor ), floor( source_rect.h * _scale_factor ) };
@@ -91,7 +91,7 @@ void Texture::set_as_render_target(){
 }
 
 void Texture::create_blank_texture(int width, int height){
-
+//	std::cout<<"width: "<<width<<"\nheight: "<<height<<std::endl;
 	SDL_SetRenderDrawBlendMode(_renderer_ptr, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(objectTexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor( _renderer_ptr, 0xFF, 0xFF, 0xFF, 0x00 );
@@ -102,6 +102,12 @@ void Texture::create_blank_texture(int width, int height){
 		std::cout << "Could not create blank texture. SDL_Error: %s\n" << SDL_GetError() << std::endl;
 	}
 	else{
+//		_width = width;
+//		_height = height;
+//		source_rect.x = 0;
+//		source_rect.y = 0;
+//		source_rect.w = _width;
+//		source_rect.h = _height;
 		clip_from_texture();
 	}
 }
@@ -127,7 +133,7 @@ bool Texture::_is_renderable(){
 	bool renderable = false;
 	if( _renderer_ptr != NULL ){
 		if( objectTexture != NULL ){
-			if(source_rect.w == 0 || source_rect.h == 0){
+			if(!source_rect.w == 0 || !source_rect.h == 0){
 				renderable = true;
 			}
 			else{
@@ -179,6 +185,7 @@ SpriteSheet::SpriteSheet(){
 
 void SpriteSheet::render(int x, int y, int sprite_num, double angle){
 	if(_is_renderable()){
+		SDL_SetRenderDrawBlendMode( _renderer_ptr, _blendMode );
 		SDL_Rect destination_rect = {x, y, source_rect.w, source_rect.h};
 		SDL_RenderCopy(_renderer_ptr, objectTexture, &sprite_rect[sprite_num], &destination_rect);
 	}
@@ -187,7 +194,6 @@ void SpriteSheet::render(int x, int y, int sprite_num, double angle){
 void SpriteSheet::set_sprite_rects(std::vector<SDL_Rect> &new_sprite_rect){
 	sprite_rect = new_sprite_rect;
 }
-
 
 bool SpriteSheet::_is_renderable(){
 	bool renderable = false;
@@ -213,6 +219,9 @@ bool SpriteSheet::_is_renderable(){
 	return renderable;
 }
 
+SDL_Rect SpriteSheet::get_rect(Uint8 clip_num){
+	return sprite_rect[clip_num];
+}
 
 
 

@@ -24,6 +24,9 @@ public:
 	void draw_element();
 	void set_padding( int = 0 );
 	void set_padding( int = 0, int = 0 );
+	void set_listner(Input_event*);
+	void set_event_trigger(bool*);
+	void update_event();
 
 protected:
 	bool is_hidden;
@@ -37,7 +40,12 @@ protected:
 	int _width, _height;
 	int _padding_both;
 	int _padding_x, _padding_y;
-
+	int* mouse_x_;
+	int* mouse_y_;
+	bool* mouse_MB1_state_;
+	bool is_clicked_;
+	bool* trigger_flag_;
+	bool is_over_;
 };
 
 class UI_button : public UI_element{

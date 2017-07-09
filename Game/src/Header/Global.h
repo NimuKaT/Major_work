@@ -31,6 +31,7 @@ static const std::string slash="/";
 //Screen dimension constants
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
+extern Uint8 INIT_MENU;
 const Uint32 TEMP_FRAME_RATE_CAP = 60;
 const Uint32 TEMP_TICK_PER_FRAME = 1000 / TEMP_FRAME_RATE_CAP;
 

@@ -20,9 +20,13 @@ public:
 
 
 private:
+//	SpriteSheet test
 	SpriteSheet _texture_balls;
 
-
+//	UI_element test
+	SpriteSheet decoration_sprite;
+	UI_element test_button_;
+	bool button_event;
 
 
 

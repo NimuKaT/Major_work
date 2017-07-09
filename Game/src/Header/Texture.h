@@ -29,7 +29,7 @@ public:
 	void setBlendMode( SDL_BlendMode );
 
 	void set_image_path(std::string);
-	SDL_Rect get_rect();
+	virtual SDL_Rect get_rect();
 
 
 private:
@@ -57,6 +57,7 @@ public:
 	void init();
 	void render(int, int, int, double = 0.0);
 	void set_sprite_rects(std::vector<SDL_Rect> &new_sprite_rect);
+	SDL_Rect get_rect(Uint8);
 
 private:
 	bool _is_renderable();
