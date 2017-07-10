@@ -11,76 +11,68 @@
 const std::string SANS  = "Assets\\Fonts\\OpenSans-Regular.ttf";
 
 Text::Text(){
-	_font_size = 0;
-	_font = NULL;
-	set_color( 0x00, 0x00, 0x00, 0x00 );
+	font_size_ = 0;
+	font_ = NULL;
+	set_color(0x00, 0x00, 0x00, 0x00);
 }
 
-void Text::init(SDL_Renderer* target_renderer, std::string font, std::string text, SDL_Rect clip){
-	_renderer_ptr= target_renderer;
-	_srcrect = clip;
-	_width = clip.w;
-	_height = clip.h;
-	_text = text;
+void Text::init(SDL_Renderer* renderer_ptr, std::string font, std::string text, SDL_Rect rect){
+	renderer_ptr_= renderer_ptr;
+	source_rect_ = rect;
+	width_ = rect.w;
+	height_ = rect.h;
+	text_ = text;
 
 	set_font(font);
 	update_font();
-
-	create_blank_texture( _width, _height );
-
+	create_blank_texture(width_, height_);
 }
 
-void Text::render( int x, int y ){
+void Text::render(int x, int y){
+	if (_is_renderable()){
+		SDL_Surface* loaded_surface = TTF_RenderText_Solid(font_, text_.c_str(), color_);
 
-	if( _is_renderable() ){
-
-		SDL_Surface* loadedSurface = TTF_RenderText_Solid( _font, _text.c_str(), _color);
-
-		if( loadedSurface == NULL ){
-			printf( "Unable to load image. TTF_Error: %s\n", TTF_GetError() );
+		if (loaded_surface == NULL){
+			printf("Unable to load image. TTF_Error: %s\n", TTF_GetError());
 		}
 		else{
-			objectTexture = SDL_CreateTextureFromSurface( _renderer_ptr, loadedSurface );
+			object_texture_ = SDL_CreateTextureFromSurface(renderer_ptr_, loaded_surface);
 
-			if( objectTexture == NULL ){
-				printf( "Unable to create texture from surface. SDL Error: %s\n", SDL_GetError() );
+			if (object_texture_ == NULL){
+				printf("Unable to create texture from surface. SDL Error: %s\n", SDL_GetError());
 			}
-
-			SDL_FreeSurface(loadedSurface);
+			SDL_FreeSurface(loaded_surface);
 		}
-		TTF_SizeText(_font, _text.c_str(), &_width, &_height);
-		SDL_Rect dstrect = { x, y, _width, _height };
-
-		SDL_RenderCopy(_renderer_ptr, objectTexture, NULL, &dstrect);
-
+		TTF_SizeText(font_, text_.c_str(), &width_, &height_);
+		SDL_Rect dstrect = {x, y, width_, height_};
+		SDL_RenderCopy(renderer_ptr_, object_texture_, NULL, &dstrect);
 	}
 }
 
-void Text::set_color( Uint8 r, Uint8 g, Uint8 b , Uint8 a){
-
-	if( r >= 0x00 && r <= 0xff ){
-		_color.r = r;
+void Text::set_color(Uint8 red, Uint8 green, Uint8 blue , Uint8 alpha){
+	if (red >= 0x00 && red <= 0xff){
+		color_.r = red;
 	}
-	if( g >= 0x00 && g <= 0xff ){
-		_color.g = g;
+	if (green >= 0x00 && green <= 0xff){
+		color_.g = green;
 	}
-	if( b >= 0x00 && b <= 0xff ){
-		_color.b = b;
+	if (blue >= 0x00 && blue <= 0xff){
+		color_.b = blue;
 	}
-	if( a >= 0x00 && a <= 0xff ){
-		_color.a = a;
-	}
-}
-
-void Text::set_alpha( Uint8 a ){
-	if( a >= 0x00 && a <= 0xff ){
-		_color.a = a;
+	if (alpha >= 0x00 && alpha <= 0xff){
+		color_.a = alpha;
 	}
 }
 
-void Text::set_font_size( int size ){
-	if(size >= 0 && size <= 255 && size != _font_size){
-		_font_size = size;
+void Text::set_alpha(Uint8 alpha){
+	if (alpha >= 0x00 && alpha <= 0xff){
+		color_.a = alpha;
+	}
+}
+
+void Text::set_font_size(Uint8 font_size){
+	if (font_size >= 0 && font_size <= 0xff && font_size != font_size_){
+		font_size_ = font_size;
 		update_font();
 	}
 }
@@ -88,64 +80,59 @@ void Text::set_font_size( int size ){
 bool Text::set_font(std::string font){
 	bool font_switched = false;
 
-
-	if( font == "Sans" ){
-		_font_path = SANS;
+	if (font == "Sans"){
+		font_path_ = SANS;
 		font_switched = true;
 	}
 
-	if( font_switched ){
+	if (font_switched){
 		update_font();
 	}
-
 	return font_switched;
 }
 
-void Text::set_space_size( int width, int height){
-
-	if( width < 0 && width != _width){
-		_width = width;
+void Text::set_space_size(int width, int height){
+	if (width < 0 && width != width_){
+		width_ = width;
 	}
-	if( height < 0 && height != _height){
-		_height = height;
+	if (height < 0 && height != height_){
+		height_ = height;
 	}
-
-	create_blank_texture( _width, _height );
-
+	create_blank_texture(width_, height_);
 }
 
 void Text::update_font(){
-	TTF_CloseFont( _font ); //Free currently open font
-	_font = TTF_OpenFont( _font_path.c_str(), _font_size);
+	TTF_CloseFont(font_); //Free currently open font
+	font_ = TTF_OpenFont(font_path_.c_str(), font_size_);
 }
 
-void Text::set_text( std::string text){
-	_text = text;
+void Text::set_text(std::string text){
+	text_ = text;
 }
 
 bool Text::_is_renderable(){
 	bool renderable = false;
 
-	if( _text != std::string() ){
-		if( _font_path != std::string() ){
-			if( _font_size > 0){
-				if( _width > 0 && _height > 0 ){
+	if (text_ != std::string()){
+		if (font_path_ != std::string()){
+			if (font_size_ > 0){
+				if (width_ > 0 && height_ > 0){
 					renderable = true;
 				}
 				else{
-					std::cout << "Could not render text. Texture width or height is 0.\n" << std::endl;
+					std::cout<<"Could not render text. Texture width or height is 0.\n"<<std::endl;
 				}
 			}
 			else{
-				std::cout << "Could not render text. Font size is 0.\n" << std::endl;
+				std::cout<<"Could not render text. Font size is 0.\n"<<std::endl;
 			}
 		}
 		else{
-			std::cout << "Could not render text. Font path does not exist.\n" << std::endl;
+			std::cout<<"Could not render text. Font path does not exist.\n"<<std::endl;
 		}
 	}
 	else{
-		std::cout << "Could not render text. Text is empty.\n" << std::endl;
+		std::cout<<"Could not render text. Text is empty.\n"<<std::endl;
 	}
 	return renderable;
 }

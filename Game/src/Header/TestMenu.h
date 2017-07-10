@@ -14,27 +14,22 @@
 
 class Test_Menu : public MenuManager{
 public:
-	Test_Menu( SDL_Renderer*, Input_event* );
-	void render_Texture();
+	Test_Menu(SDL_Renderer* renderer_ptr, Input_event* input_ptr);
+	void render_texture();
 	void update_logic();
-
 
 private:
 //	SpriteSheet test
-	SpriteSheet _texture_balls;
+	SpriteSheet texture_balls_;
 
 //	UI_element test
-	SpriteSheet decoration_sprite;
+	SpriteSheet decoration_sprite_;
 	UI_element test_button_;
-	bool button_event;
-
-
+	bool button_event_;
 
 // Test Variables
 	Uint8 texture_opacity = 200;
-	float scale_factor = SCREEN_HEIGHT/9;
-	int x, y;
-
+	int x_, y_ = 0;
 };
 
 #endif /* TESTMENU_H_ */

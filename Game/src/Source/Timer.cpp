@@ -8,45 +8,44 @@
 #include "../Header/Timer.h"
 
 Timer::Timer() {
-	is_paused = false;
-	is_started = false;
-	init_time = 0;
-	passed_time = 0;
-
+	is_paused_ = false;
+	is_started_ = false;
+	init_time_ = 0;
+	passed_time_ = 0;
 }
 
 inline Timer::~Timer(){};
 
 void Timer::start(){
-	is_started = true;
-	if( !is_paused ){
-		init_time = SDL_GetTicks();
+	is_started_ = true;
+	if (!is_started_){
+		init_time_ = SDL_GetTicks();
 	}
 	else{
-		init_time = SDL_GetTicks() - passed_time;
-		is_paused = false;
-		passed_time = 0;
+		init_time_ = SDL_GetTicks() - passed_time_;
+		is_paused_ = false;
+		passed_time_ = 0;
 	}
 }
 
 void Timer::stop(){
-	if( is_started ){
-		init_time = 0;
-		is_started = false;
-		is_paused = false;
+	if (is_started_){
+		init_time_ = 0;
+		is_started_ = false;
+		is_paused_ = false;
 	}
 }
 
 Uint32 Timer::get_time_elapsed(){
-	Uint32 time_elapsed = init_time - SDL_GetTicks();
+	Uint32 time_elapsed = init_time_ - SDL_GetTicks();
 	return time_elapsed;
 }
 
 void Timer::pause(){
-	if( !is_paused && is_started ){
-		passed_time = SDL_GetTicks() - init_time;
-		is_paused = true;
-		init_time = 0;
+	if (!is_paused_ && is_started_){
+		passed_time_ = SDL_GetTicks() - init_time_;
+		is_paused_ = true;
+		init_time_ = 0;
 	}
 }
 
@@ -57,8 +56,8 @@ void Timer::reset(){
 
 bool Timer::is_passed(Uint32 duration){
 	bool is_time_passed = false;
-	if( !is_paused && is_started ){
-		if (  SDL_GetTicks() - init_time >= duration ){
+	if (!is_paused_ && is_started_){
+		if (SDL_GetTicks() - init_time_ >= duration){
 			is_time_passed = true;
 		}
 	}

@@ -13,23 +13,20 @@
 #include "Global.h"
 
 
-void add_rect_to_vector(std::vector< SDL_Rect> &, int, int, int, int);
+void add_rect_to_vector(std::vector<SDL_Rect> &, int, int, int, int);
 
 class Texture{
 public:
 	Texture();
-//	void init( SDL_Renderer* , std::string = std::string(), std::vector< SDL_Rect > = std::vector< SDL_Rect >() );
-	void render(int, int);
+	void render(int x, int y);
 	void set_as_render_target();
-	SDL_Rect get_rect(int);
-	void create_blank_texture(int, int);
-	void set_renderer( SDL_Renderer* );
-	void set_texture_alpha( Uint8 );
-	void set_scale(float);
-	void setBlendMode( SDL_BlendMode );
+	SDL_Rect get_rect();
+	void create_blank_texture(int width, int height);
+	void set_renderer(SDL_Renderer* renderer_ptr);
+	void set_texture_alpha(Uint8 alpha);
+	void setBlendMode(SDL_BlendMode mode);
 
-	void set_image_path(std::string);
-	virtual SDL_Rect get_rect();
+	void set_image_path(std::string path);
 
 
 private:
@@ -37,16 +34,15 @@ private:
 	void clip_from_texture();
 	bool _is_renderable();
 
-	std::string image_path;
+	std::string image_path_;
 
 protected:
-	SDL_Texture* objectTexture;
-	SDL_Renderer* _renderer_ptr;
-	int _width, _height;
-	Uint8 _textureAlpha;
-	float _scale_factor;
-	SDL_BlendMode _blendMode;
-	SDL_Rect source_rect;
+	SDL_Texture* object_texture_;
+	SDL_Renderer* renderer_ptr_;
+	int width_, height_;
+	Uint8 texture_alpha_;
+	SDL_BlendMode blend_mode_;
+	SDL_Rect source_rect_;
 
 
 };
@@ -55,13 +51,13 @@ class SpriteSheet : public Texture{
 public:
 	SpriteSheet();
 	void init();
-	void render(int, int, int, double = 0.0);
-	void set_sprite_rects(std::vector<SDL_Rect> &new_sprite_rect);
-	SDL_Rect get_rect(Uint8);
+	void render(int x, int y, int sprite_num, double angle = 0.0);
+	void set_sprite_rects(std::vector<SDL_Rect> &sprite_rect);
+	SDL_Rect get_rect(Uint8 rect_num);
 
 private:
 	bool _is_renderable();
-	std::vector<SDL_Rect> sprite_rect;
+	std::vector<SDL_Rect> sprite_rect_;
 
 };
 

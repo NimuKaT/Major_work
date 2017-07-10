@@ -8,22 +8,27 @@
 #include "../Header/Object.h"
 
 HitBox::HitBox(){
-};
-
-void HitBox::set_position(int new_x, int new_y){
-	x_ = new_x;
-	y_ = new_y;
+	x_ = 0;
+	y_ = 0;
+	width_ = 0;
+	height_ = 0;
 }
 
-void HitBox::set_size(int new_width, int new_height){
-	width_ = new_width;
-	height_ = new_height;
+void HitBox::set_position(int x, int y){
+	x_ = x;
+	y_ = y;
 }
 
-bool HitBox::detect_collision(HitBox* test_object){
+void HitBox::set_size(int width, int height){
+	width_ = width;
+	height_ = height;
+}
+
+bool HitBox::detect_collision(HitBox* test_object_ptr){
 	bool is_hit = false;
-	if (x_ > test_object->x_ + test_object->width_ && x_ + width_ > test_object->x_){
-		if(y_ > test_object->y_ + test_object->height_ && y_ + height_ > test_object->y_){
+
+	if (x_ > test_object_ptr->x_ + test_object_ptr->width_ && x_ + width_ > test_object_ptr->x_){
+		if(y_ > test_object_ptr->y_ + test_object_ptr->height_ && y_ + height_ > test_object_ptr->y_){
 			is_hit = true;
 		}
 	}
@@ -32,9 +37,10 @@ bool HitBox::detect_collision(HitBox* test_object){
 
 
 Object::Object() {
-	// TODO Auto-generated constructor stub
-	x_position = 0;
-	y_position = 0;
+	true_x_position_ = 0.0;
+	true_y_position_ = 0.0;
+	x_position_ = 0;
+	y_position_ = 0;
 }
 
 Object::~Object() {
@@ -42,7 +48,7 @@ Object::~Object() {
 }
 
 SDL_Rect Object::get_rect(){
-	SDL_Rect object_position = { x_position, y_position, 0, 0 };
+	SDL_Rect object_position = {x_position_, y_position_, 0, 0};
 	return object_position;
 }
 
@@ -59,6 +65,6 @@ void Player::update(){
 
 }
 
-void Player::get_movement( int x, int y){
+void Player::get_movement(int x, int y){
 
 }

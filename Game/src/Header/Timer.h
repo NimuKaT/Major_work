@@ -19,14 +19,14 @@ public:
 	void pause();
 	void reset();
 	Uint32 get_time_elapsed();
-	bool is_passed(Uint32);
+	bool is_passed(Uint32 duration);
 
 
 private:
-	Uint32 init_time;
-	Uint32 passed_time;
-	bool is_started;
-	bool is_paused;
+	Uint32 init_time_ = 0;
+	Uint32 passed_time_ = 0;
+	bool is_started_ = false;;
+	bool is_paused_ = false;
 };
 
 #endif /* TIMER_H_ */

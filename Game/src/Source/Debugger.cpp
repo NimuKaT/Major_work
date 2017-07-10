@@ -9,76 +9,56 @@
 
 void Debugger::init(SDL_Renderer* renderer_ptr, Input_event* input_ptr){
 //	main debug log texture
-	debug_log.set_renderer( renderer_ptr);
+	debug_log_.set_renderer(renderer_ptr);
 
-	input_data = input_ptr;
+	input_data_ = input_ptr;
 
 //	fps texture
-	fps_text = "fps: 0";
-
+	fps_text_ = "fps: 0";
 	SDL_Rect fps_box {0,0,150,60};
-
-	frame_rate.init( renderer_ptr, "Sans", fps_text, fps_box);
-	frame_rate.set_color( 0, 0, 0, 150);
-	frame_rate.set_font_size(40);
+	frame_rate_.init(renderer_ptr, "Sans", fps_text_, fps_box);
+	frame_rate_.set_color(0, 0, 0, 150);
+	frame_rate_.set_font_size(40);
 
 //	Mouse position texture
-
-	mouse_text = "x: 	y: ";
+	mouse_text_ = "x: 	y: ";
 	SDL_Rect mouse_box {0, 0, 320, 60};
-	mouse_location.init( renderer_ptr, "Sans", mouse_text, mouse_box );
-	mouse_location.set_color( 0, 0, 0, 255 );
-	mouse_location.set_font_size(40);
+	mouse_location_.init(renderer_ptr, "Sans", mouse_text_, mouse_box);
+	mouse_location_.set_color(0, 0, 0, 255);
+	mouse_location_.set_font_size(40);
 
 //	Intitialise fps timer
+	fps_timer_.start();
 
-	fps_timer.start();
 }
 
 void Debugger::change_option( std::string option_name, bool state ){
-
-	if ( option_name == "frame_rate" ){
-		options[FRAME_RATE] = state;
+	if (option_name == "frame_rate"){
+		options_[FRAME_RATE] = state;
 	}
-
-	else if ( option_name == "mouse_location" ){
-		options[MOUSE_LOCATION] = state;
+	else if (option_name == "mouse_location"){
+		options_[MOUSE_LOCATION] = state;
 	}
-
-	else if ( option_name == "current_menu" ){
-		options[CURRENT_MENU] = state;
+	else if (option_name == "current_menu"){
+		options_[CURRENT_MENU] = state;
 	}
 }
 
 void Debugger::render(){
-
-
-	if( fps_timer.is_passed(1000) ){
-		fps_timer.reset();
-		fps_text = "fps: " + std::to_string( frame_count );
-		frame_rate.set_text( fps_text );
-		frame_count = 0;
-
+	if (fps_timer_.is_passed(1000)){
+		fps_timer_.reset();
+		fps_text_ = "fps: " + std::to_string(frame_count_);
+		frame_rate_.set_text(fps_text_);
+		frame_count_ = 0;
 	}
-
-	if( options[FRAME_RATE] ){
+	if (options_[FRAME_RATE]){
 //		printf(fps_text.c_str());
-		frame_rate.render( 0, 0 );
-		frame_count++;
+		frame_rate_.render(0, 0);
+		frame_count_++;
 	}
-
-	if( options[MOUSE_LOCATION] ){
-//		SDL_GetMouseState( &mouse_x, &mouse_y );
-		mouse_text = "x: " + std::to_string(input_data->mouse_x) + " y: " + std::to_string(input_data->mouse_y);
-		mouse_location.set_text( mouse_text );
-		mouse_location.render( 0, 60 );
-
+	if (options_[MOUSE_LOCATION]){
+		mouse_text_ = "x: " + std::to_string(input_data_->mouse_x) + " y: " + std::to_string(input_data_->mouse_y);
+		mouse_location_.set_text(mouse_text_);
+		mouse_location_.render(0, 60);
 	}
-
 }
-
-void Debugger::getMousePos( std::tuple<int,int> mousePos ){
-	mouse_x = std::get<0>(mousePos);
-	mouse_y = std::get<1>(mousePos);
-}
-

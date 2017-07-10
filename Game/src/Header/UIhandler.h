@@ -17,29 +17,28 @@
 class UI_element{
 public:
 	UI_element();
-	bool init_element(SDL_Renderer*, std::string, SpriteSheet*, int);
-	void hide_element(bool);
-	void set_position( int, int );
-	bool is_over_element( int, int );
+	bool init_element(SDL_Renderer* renderer_ptr, std::string text, SpriteSheet* element_decoration, int clip_number);
+	void hide_element(bool hide);
+	void set_position(int x, int y);
 	void draw_element();
-	void set_padding( int = 0 );
-	void set_padding( int = 0, int = 0 );
-	void set_listner(Input_event*);
-	void set_event_trigger(bool*);
+	void set_padding( int padding_both = 0 );
+	void set_padding( int padding_x = 0, int padding_y = 0 );
+	void set_listner(Input_event* event_log);
+	void set_event_trigger(bool* event_trigger);
 	void update_event();
 
 protected:
-	bool is_hidden;
-	SDL_Renderer* _renderer_ptr;
-	Texture _element_texture;
-	Text _text_texture;
-	SpriteSheet* _decoration_ptr;
-	std::string _element_text;
-	int _clip_number;
-	int _x_position, _y_position;
-	int _width, _height;
-	int _padding_both;
-	int _padding_x, _padding_y;
+	bool is_hidden_;
+	SDL_Renderer* renderer_ptr_;
+	Texture element_texture_;
+	Text text_texture_;
+	SpriteSheet* decoration_ptr_;
+	std::string element_text_;
+	int clip_number_;
+	int x_position_, y_position_;
+	int width_, height_;
+	int padding_both_;
+	int padding_x_, padding_y_;
 	int* mouse_x_;
 	int* mouse_y_;
 	bool* mouse_MB1_state_;

@@ -25,39 +25,31 @@ public:
 //	virtual ~MenuManager() = 0;
 //	virtual void load_data() = 0;
 //	virtual void unload_data() = 0;
-	virtual void render_Texture() = 0;
+	virtual void render_texture() = 0;
 	virtual void update_logic() = 0;
 
 protected:
-	int _mouse_x, _mouse_y;
-	bool key_pressed[KEY_PRESS_DEFAULT];
-	Input_event* _input_data = NULL;
-	SDL_Renderer* _renderer = NULL;
+	int mouse_x_, mouse_y_;
+	Input_event* input_data_ = NULL;
+	SDL_Renderer* renderer_ptr_ = NULL;
 
 };
 
 class MainMenu : public MenuManager{
 public:
-	MainMenu( SDL_Renderer*, Input_event* );
-	void render_Texture();
-	void event_Handler(SDL_Event &, bool &);
+	MainMenu(SDL_Renderer* renderer_ptr, Input_event* input_ptr);
+	void render_texture();
+	void event_Handler(SDL_Event &event, bool &quit);
 	void update_logic();
 
-	std::vector< render_queue > queue;
-	std::vector< SpriteSheet> sprite_sheets;
-
-	std::vector< std::string > spritePaths;
-	std::vector< SDL_Rect > clips;
-
-	Text test_text;
-
 private:
+	std::vector<render_queue> queue;
+	std::vector<SpriteSheet> sprite_sheets;
+	std::vector<std::string> spritePaths;
+	std::vector<SDL_Rect> clips;
+	Text test_text;
 	UI_element _test_button;
 	Texture main_menu_background;
-
-
-
-
 };
 
 

@@ -13,13 +13,13 @@
 class HitBox {
 public:
 	HitBox();
-	void set_position(int, int);
-	void set_size(int, int);
-	bool detect_collision(HitBox*);
+	void set_position(int x, int y);
+	void set_size(int width, int height);
+	bool detect_collision(HitBox* test_object_ptr);
 
 protected:
-	int x_,y_ = 0;
-	int width_,height_ = 0;
+	int x_, y_ = 0;
+	int width_, height_ = 0;
 
 protected:
 
@@ -30,20 +30,17 @@ protected:
 
 class Object {
 public:
-	// public class functions
 	Object();
 	virtual ~Object();
 	virtual void update() = 0;
 	SDL_Rect get_rect();
-	std::vector< SDL_Rect > get_render_queue();
+	std::vector<SDL_Rect> get_render_queue();
 
 protected:
-	// class variables
-
-	float true_x_position, true_y_position;
-	int x_position, y_position;
-	int sprite_frame;
-	std::vector<int> associated_sprite_queues;
+	float true_x_position_, true_y_position_ = 0.0;
+	int x_position_, y_position_ = 0.;
+	int sprite_frame_ = 0;
+	std::vector<int> associated_sprite_queues_;
 
 
 
@@ -54,7 +51,7 @@ public:
 	Player();
 	~Player();
 	void update();
-	void get_movement( int, int );
+	void get_movement(int x, int y);
 
 private:
 	bool input_states[5];

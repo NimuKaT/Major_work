@@ -23,29 +23,26 @@ enum DEBUGGER_OPTIONS{
 
 class Debugger {
 private:
-	Timer fps_timer;
-	bool options[OPTIONS_LENGTH];
-	Uint8 frame_count;
-	int mouse_x, mouse_y;
-	int menu_ID;
+	Timer fps_timer_;
+	bool options_[OPTIONS_LENGTH];
+	Uint8 frame_count_ = 0;
+	int menu_ID_ = 0;
 
+	Texture debug_log_;
+	Text frame_rate_;
+	Text mouse_location_;
+	Text current_menu_;
 
-	Texture debug_log;
-	Text frame_rate;
-	Text mouse_location;
-	Text current_menu;
+	std::string fps_text_;
+	std::string mouse_text_;
+	std::string menu_name_;
 
-	std::string fps_text;
-	std::string mouse_text;
-	std::string menu_name;
-
-	Input_event* input_data;
+	Input_event* input_data_;
 
 public:
-	void init( SDL_Renderer*, Input_event* );
-	void change_option( std::string, bool );
+	void init(SDL_Renderer*, Input_event*);
+	void change_option(std::string, bool);
 	void render();
-	void getMousePos( std::tuple<int,int> );
 
 };
 

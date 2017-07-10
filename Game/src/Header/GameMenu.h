@@ -26,9 +26,8 @@ enum DEFAULT_CONTROLLS{
 
 class GameMenu : public MenuManager{
 public:
-	GameMenu( SDL_Renderer* );
-	void render_Texture();
-	void event_Handler( SDL_Event &, bool & );
+	GameMenu(SDL_Renderer* renderer_ptr, Input_event* input_ptr);
+	void render_texture();
 	void update_logic();
 
 protected:
@@ -39,7 +38,7 @@ protected:
 	void pause_menu();
 	void load_stage();
 	Player player;
-	std::vector< std::shared_ptr< Object > > Objects;
+	std::vector<std::shared_ptr<Object>> Objects;
 
 private:
 	bool is_paused;
