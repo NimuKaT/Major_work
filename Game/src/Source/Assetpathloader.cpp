@@ -10,6 +10,8 @@
 int SCREEN_WIDTH = 1366;
 int SCREEN_HEIGHT = 768;
 Uint8 INIT_MENU = TEST_MENU;
+std::vector<std::string> IMAGE_PATHS(DEFAULT_TEXTURE_ID, "");
+std::vector<std::vector<SDL_Rect>> IMAGE_RECTS(DEFAULT_TEXTURE_ID);
 
 std::vector<std::string> get_options(){
 	std::vector<std::string> options;
@@ -42,10 +44,33 @@ std::vector<std::string> get_options(){
 					else if (value == "test"){
 						INIT_MENU = TEST_MENU;
 					}
+					else if (value == "game"){
+						INIT_MENU = GAME_MENU;
+					}
 				}
 			}
 		}
 	}
 	infile.close();
+	init_image_data();
 	return options;
+}
+
+void init_image_data(){
+	IMAGE_PATHS[PLAYER] = "Assets"+slash+"Images"+slash+"player.png";
+	IMAGE_PATHS[TEMP_MAIN_MENU_BACKGROUND] = "Assets"+slash+"Images"+slash+"temp_main_menu_background.png";
+	IMAGE_PATHS[TEST_BALL] = "Assets"+slash+"Images"+slash+"test_balls.png";
+	IMAGE_PATHS[TEST_UI_ELEMENT] = "Assets"+slash+"Images"+slash+"test_UI_element.png";
+	IMAGE_PATHS[TEST] = "Assets"+slash+"Images"+slash+"test.png";
+
+	IMAGE_RECTS[PLAYER].push_back(SDL_Rect{0, 0, 100, 100});
+
+	IMAGE_RECTS[TEST_BALL].resize(BALL_LENGTH);
+	IMAGE_RECTS[TEST_BALL][BALL_RED] = SDL_Rect{0, 0, 100, 100};
+	IMAGE_RECTS[TEST_BALL][BALL_GREEN] = SDL_Rect{0, 100, 100, 100};
+	IMAGE_RECTS[TEST_BALL][BALL_BLUE] = SDL_Rect{100, 0, 100, 100};
+	IMAGE_RECTS[TEST_BALL][BALL_YELLOW] = SDL_Rect{100, 100, 100, 100};
+
+	IMAGE_RECTS[TEST_UI_ELEMENT].resize(1);
+	IMAGE_RECTS[TEST_UI_ELEMENT][0] = SDL_Rect{0, 0, 650, 150};
 }

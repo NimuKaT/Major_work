@@ -57,7 +57,7 @@ void close(SDL_Window* window_ptr, SDL_Renderer* renderer_ptr){
 }
 
 //Logs users inputs
-void get_input(SDL_Event& event, Input_event& input_data, bool &quit){
+void get_input(SDL_Event& event, std::shared_ptr<Input_event> &input_data, bool &quit){
 	while (SDL_PollEvent(&event) != 0){
 		switch (event.type){
 			case SDL_QUIT:{
@@ -68,35 +68,35 @@ void get_input(SDL_Event& event, Input_event& input_data, bool &quit){
 			case SDL_KEYUP:{
 				switch(event.key.keysym.sym){
 					case SDLK_w:{
-						input_data.key_pressed[KEY_PRESS_W] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_W] = event.key.state;
 						break;
 					}
 					case SDLK_a:{
-						input_data.key_pressed[KEY_PRESS_A] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_A] = event.key.state;
 						break;
 					}
 					case SDLK_s:{
-						input_data.key_pressed[KEY_PRESS_S] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_S] = event.key.state;
 						break;
 					}
 					case SDLK_d:{
-						input_data.key_pressed[KEY_PRESS_D] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_D] = event.key.state;
 						break;
 					}
 					case SDLK_UP:{
-						input_data.key_pressed[KEY_PRESS_UP] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_UP] = event.key.state;
 						break;
 					}
 					case SDLK_LEFT:{
-						input_data.key_pressed[KEY_PRESS_LEFT] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_LEFT] = event.key.state;
 						break;
 					}
 					case SDLK_DOWN:{
-						input_data.key_pressed[KEY_PRESS_DOWN] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_DOWN] = event.key.state;
 						break;
 					}
 					case SDLK_RIGHT:{
-						input_data.key_pressed[KEY_PRESS_RIGHT] = event.key.state;
+						input_data->key_pressed[KEY_PRESS_RIGHT] = event.key.state;
 						break;
 					}
 				}
@@ -106,16 +106,16 @@ void get_input(SDL_Event& event, Input_event& input_data, bool &quit){
 			case SDL_MOUSEBUTTONDOWN:{
 				switch (event.button.button){
 					case SDL_BUTTON_LEFT:{
-						input_data.key_pressed[KEY_PRESS_MB_1] = event.button.state;
+						input_data->key_pressed[KEY_PRESS_MB_1] = event.button.state;
 					}
 				}
-				input_data.mouse_x = event.button.x;
-				input_data.mouse_y = event.button.y;
+				input_data->mouse_x = event.button.x;
+				input_data->mouse_y = event.button.y;
 				break;
 			}
 			case SDL_MOUSEMOTION:{
-				input_data.mouse_x = event.button.x;
-				input_data.mouse_y = event.button.y;
+				input_data->mouse_x = event.button.x;
+				input_data->mouse_y = event.button.y;
 				break;
 			}
 		}
@@ -135,14 +135,13 @@ int main(int argc, char* args[]){
 	//Runs the main loop if the initilisation of the window and renderer succeeds
 	if (init(window_ptr, renderer_ptr)){
 //		Input event struct initialiser
-		Input_event input_data;
-		input_data.key_pressed.fill(false);
-		input_data.mouse_x = 0;
-		input_data.mouse_y = 0;
-
+		std::shared_ptr<Input_event> input_data = std::make_shared<Input_event>();
+		input_data->key_pressed.fill(false);
+		input_data->mouse_x = 0;
+		input_data->mouse_y = 0;
 //		Initialiser for the debug menu
 		Debugger console;
-		console.init(renderer_ptr, &input_data);
+		console.init(renderer_ptr, input_data);
 		console.change_option("frame_rate", true);
 		console.change_option("mouse_location", true);
 
@@ -151,8 +150,9 @@ int main(int argc, char* args[]){
 
 //		Vector of Menu objects
 		std::vector<std::unique_ptr<MenuManager>> menus(DEFAULT_MENU);
-		menus[MAIN_MENU] = std::unique_ptr<MenuManager>(new MainMenu(renderer_ptr, &input_data));
-		menus[TEST_MENU] = std::unique_ptr<MenuManager>(new Test_Menu(renderer_ptr, &input_data));
+		menus[MAIN_MENU] = std::unique_ptr<MenuManager>(new MainMenu(renderer_ptr, input_data));
+		menus[TEST_MENU] = std::unique_ptr<MenuManager>(new Test_Menu(renderer_ptr, input_data));
+		menus[GAME_MENU] = std::unique_ptr<MenuManager>(new GameMenu(renderer_ptr, input_data));
 
 //		Frame capping (not working)
 		Timer frame_rate_cap;
@@ -174,10 +174,10 @@ int main(int argc, char* args[]){
 			get_input(event, input_data, quit);
 
 //			Logs user input
-			menus[*menu_ptr.get()]->update_logic();
+			menus[*menu_ptr]->update_logic();
 
 //			Renders graphics according to logic
-			menus[*menu_ptr.get()]->render_texture();
+			menus[*menu_ptr]->render_texture();
 
 			console.render();
 

@@ -30,14 +30,14 @@ public:
 
 protected:
 	int mouse_x_, mouse_y_;
-	Input_event* input_data_ = NULL;
-	SDL_Renderer* renderer_ptr_ = NULL;
+	std::weak_ptr<Input_event> input_data_;
+	SDL_Renderer* renderer_ptr_;
 
 };
 
 class MainMenu : public MenuManager{
 public:
-	MainMenu(SDL_Renderer* renderer_ptr, Input_event* input_ptr);
+	MainMenu(SDL_Renderer* renderer_ptr, std::shared_ptr<Input_event> &input_ptr);
 	void render_texture();
 	void event_Handler(SDL_Event &event, bool &quit);
 	void update_logic();

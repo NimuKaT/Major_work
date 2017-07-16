@@ -23,7 +23,7 @@ Texture::Texture(){
 	width_ = 0;
 	height_ = 0;
 	texture_alpha_ = 255;
-	blend_mode_ = SDL_BLENDMODE_ADD;
+	blend_mode_ = SDL_BLENDMODE_BLEND;
 }
 
 void Texture::load_texture(){
@@ -61,11 +61,12 @@ void Texture::set_as_render_target(){
 }
 
 void Texture::create_blank_texture(int width, int height){
-	SDL_SetRenderDrawBlendMode(renderer_ptr_, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureBlendMode(object_texture_, SDL_BLENDMODE_BLEND);
+	SDL_DestroyTexture(object_texture_);
+	SDL_SetRenderDrawBlendMode(renderer_ptr_, blend_mode_);
+	SDL_SetTextureBlendMode(object_texture_, blend_mode_);
 	SDL_SetRenderDrawColor(renderer_ptr_, 0xFF, 0xFF, 0xFF, 0x00);
 	object_texture_ = SDL_CreateTexture(renderer_ptr_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
-	setBlendMode(SDL_BLENDMODE_BLEND);
+	setBlendMode(blend_mode_);
 
 	if (object_texture_ == NULL){
 		std::cout << "Could not create blank texture. SDL_Error: %s\n" << SDL_GetError() << std::endl;
@@ -136,7 +137,7 @@ SpriteSheet::SpriteSheet(){
 void SpriteSheet::render(int x, int y, int sprite_num, double angle){
 	if(_is_renderable()){
 		SDL_SetRenderDrawBlendMode(renderer_ptr_, blend_mode_);
-		SDL_Rect destination_rect = {x, y, source_rect_.w, source_rect_.h};
+		SDL_Rect destination_rect = {x, y, sprite_rect_[sprite_num].w, sprite_rect_[sprite_num].h};
 		SDL_RenderCopy(renderer_ptr_, object_texture_, &sprite_rect_[sprite_num], &destination_rect);
 	}
 }

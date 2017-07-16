@@ -107,7 +107,7 @@ void UI_element::set_listner(Input_event* event_log){
 void UI_element::set_event_trigger(bool* event_triger){
 	trigger_flag_ = event_triger;
 }
-
+// TODO remove pointer
 void UI_element::update_event(){
 	if (x_position_ < *mouse_x_ && x_position_ + width_ > *mouse_x_){
 		if (y_position_ < *mouse_y_ && y_position_ + height_ > *mouse_y_){

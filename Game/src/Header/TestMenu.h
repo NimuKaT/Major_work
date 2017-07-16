@@ -14,7 +14,7 @@
 
 class Test_Menu : public MenuManager{
 public:
-	Test_Menu(SDL_Renderer* renderer_ptr, Input_event* input_ptr);
+	Test_Menu(SDL_Renderer* renderer_ptr, std::shared_ptr<Input_event> &input_ptr);
 	void render_texture();
 	void update_logic();
 

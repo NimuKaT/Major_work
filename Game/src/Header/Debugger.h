@@ -37,10 +37,10 @@ private:
 	std::string mouse_text_;
 	std::string menu_name_;
 
-	Input_event* input_data_;
+	std::weak_ptr<Input_event> input_data_;
 
 public:
-	void init(SDL_Renderer*, Input_event*);
+	void init(SDL_Renderer*, std::shared_ptr<Input_event> &input_ptr);
 	void change_option(std::string, bool);
 	void render();
 

@@ -7,7 +7,7 @@
 
 #include "../Header/Debugger.h"
 
-void Debugger::init(SDL_Renderer* renderer_ptr, Input_event* input_ptr){
+void Debugger::init(SDL_Renderer* renderer_ptr, std::shared_ptr<Input_event> &input_ptr){
 //	main debug log texture
 	debug_log_.set_renderer(renderer_ptr);
 
@@ -32,7 +32,7 @@ void Debugger::init(SDL_Renderer* renderer_ptr, Input_event* input_ptr){
 
 }
 
-void Debugger::change_option( std::string option_name, bool state ){
+void Debugger::change_option(std::string option_name, bool state){
 	if (option_name == "frame_rate"){
 		options_[FRAME_RATE] = state;
 	}
@@ -57,7 +57,9 @@ void Debugger::render(){
 		frame_count_++;
 	}
 	if (options_[MOUSE_LOCATION]){
-		mouse_text_ = "x: " + std::to_string(input_data_->mouse_x) + " y: " + std::to_string(input_data_->mouse_y);
+		if(!input_data_.expired()){
+			mouse_text_ = "x: " + std::to_string(input_data_.lock()->mouse_x) + " y: " + std::to_string(input_data_.lock()->mouse_y);
+		}
 		mouse_location_.set_text(mouse_text_);
 		mouse_location_.render(0, 60);
 	}

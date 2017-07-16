@@ -14,14 +14,13 @@ void create_queue(std::vector<render_queue>* queue, int sprite_number, int x_coo
 	queue->push_back(new_queue);
 }
 //TODO Memory allocator, deallocator and deconstructor
-MainMenu::MainMenu(SDL_Renderer* renderer_ptr, Input_event* input_ptr){
+MainMenu::MainMenu(SDL_Renderer* renderer_ptr, std::shared_ptr<Input_event> &input_ptr){
 	renderer_ptr_ = renderer_ptr;
 	input_data_ = input_ptr;
-	spritePaths.push_back("Assets\\Images\\test_balls.png");
-	spritePaths.push_back("Assets\\Images\\test_UI_element.png");
-	std::string path_bg = "Assets\\Images\\temp_main_menu_background.png";
-	main_menu_background.set_renderer(renderer_ptr);
-	main_menu_background.set_image_path(path_bg);
+	spritePaths.push_back(IMAGE_PATHS[TEST_BALL]);
+	spritePaths.push_back(IMAGE_PATHS[TEST_UI_ELEMENT]);
+	main_menu_background.set_renderer(renderer_ptr_);
+	main_menu_background.set_image_path(IMAGE_PATHS[TEMP_MAIN_MENU_BACKGROUND]);
 
 	std::vector< SDL_Rect > clips ;
 	add_rect_to_vector(clips, 0, 0, 100, 100);
@@ -57,20 +56,22 @@ void MainMenu::render_texture(){
 }
 
 void MainMenu::update_logic(){
-	if (input_data_->key_pressed[KEY_PRESS_W]){
-		create_queue( &queue, 0, 0, 0, 0 );
-	}
-	if (input_data_->key_pressed[KEY_PRESS_A]){
-		create_queue( &queue, 0, 0, 0, 1);
-	}
-	if (input_data_->key_pressed[KEY_PRESS_S]){
-		create_queue( &queue, 0, 0, 0, 2);
-	}
-	if (input_data_->key_pressed[KEY_PRESS_D]){
-		create_queue( &queue, 0, 0, 0, 3);
-	}
-	if (input_data_->key_pressed[KEY_PRESS_DEFAULT]){
+	if (!input_data_.expired()){
+		if (input_data_.lock()->key_pressed[KEY_PRESS_W]){
+			create_queue( &queue, 0, 0, 0, 0 );
+		}
+		if (input_data_.lock()->key_pressed[KEY_PRESS_A]){
+			create_queue( &queue, 0, 0, 0, 1);
+		}
+		if (input_data_.lock()->key_pressed[KEY_PRESS_S]){
+			create_queue( &queue, 0, 0, 0, 2);
+		}
+		if (input_data_.lock()->key_pressed[KEY_PRESS_D]){
+			create_queue( &queue, 0, 0, 0, 3);
+		}
+		if (input_data_.lock()->key_pressed[KEY_PRESS_DEFAULT]){
 
+		}
 	}
 }
 

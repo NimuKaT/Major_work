@@ -35,6 +35,19 @@ extern Uint8 INIT_MENU;
 const Uint32 TEMP_FRAME_RATE_CAP = 60;
 const Uint32 TEMP_TICK_PER_FRAME = 1000 / TEMP_FRAME_RATE_CAP;
 
+enum TEXTURE_ID{
+	PLAYER,
+	TEMP_MAIN_MENU_BACKGROUND,
+	TEST_BALL,
+	TEST_UI_ELEMENT,
+	TEST,
+	DEFAULT_TEXTURE_ID
+};
+
+extern std::vector<std::string> IMAGE_PATHS;
+extern std::vector<std::vector<SDL_Rect>> IMAGE_RECTS;
+
+
 enum KEY_PRESS {
 	KEY_PRESS_W,
 	KEY_PRESS_A,
@@ -44,6 +57,7 @@ enum KEY_PRESS {
 	KEY_PRESS_LEFT,
 	KEY_PRESS_DOWN,
 	KEY_PRESS_RIGHT,
+	KEY_PRESS_ESC,
 	KEY_PRESS_MB_1,
 	KEY_PRESS_DEFAULT
 
@@ -64,6 +78,25 @@ struct Input_event{
 	int mouse_y;
 };
 
+enum STAGE_ID{
+	STAGE_TEST,
+	STAGE_TUTORIAL,
+	STAGE_1_1,
+	STAGE_DEFAULT
+};
+
+enum ENEMY_TYPE_IF{
+	TEST_BOT,
+	DEAFAULT_ENEMY
+};
+
+enum TEST_BALL_RECT{
+	BALL_RED,
+	BALL_GREEN,
+	BALL_BLUE,
+	BALL_YELLOW,
+	BALL_LENGTH
+};
 
 //TODO remove basic arrays and pointers
 

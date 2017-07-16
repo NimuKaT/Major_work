@@ -14,6 +14,7 @@
 
 
 std::vector<std::string> get_options();
+void init_image_data();
 
 
 #endif /* ASSETOATHLOADER_H_ */
