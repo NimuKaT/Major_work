@@ -48,7 +48,7 @@ bool Engine::load_stage(STAGE_ID stage_id){
 			wall_objects_.push_back(std::make_shared<Wall>());
 			wall_objects_.back()->set_position(200, 200);
 			wall_objects_.back()->set_size(100, 100);
-			object_list_.push_back(wall_objects_.back());
+//			object_list_.push_back(wall_objects_.back());
 
 
 //			Sprite sheet loading
@@ -119,6 +119,8 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 	}
 //	Collision functions with enemy and player bullets
 
+	std::cout<<get_angle_cursor_rel_player(input_data, player_objects_[0])<<std::endl;
+
 
 	for (auto object : object_list_){
 		if (!object.expired()){
@@ -128,6 +130,17 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 
 
 }
+
+float Engine::get_angle_cursor_rel_player(std::weak_ptr<Input_event> &input_data, std::weak_ptr<Player> player){
+	float angle = 0.0;
+	if (!input_data.expired() && !player.expired()){
+		int x = input_data.lock()->mouse_x - (player.lock()->x_ + player.lock()->width_ + shift_x_);
+		int y = -(input_data.lock()->mouse_y - (player.lock()->y_ + player.lock()->height_ + shift_y_));
+		angle = atan2(y,x) / PI * 180;
+	}
+	return angle;
+}
+
 
 void Engine::render_from_queue(std::tuple<int, int, TEXTURE_ID, int> queue){
 	std::cout<<"x: "<<std::get<0>(queue) + shift_x_<<"\ny: "<<std::get<1>(queue) + shift_y_<<"\nImage_ID: "<<std::get<2>(queue)<<"\nRect_ID"<<std::get<3>(queue)<<std::endl;

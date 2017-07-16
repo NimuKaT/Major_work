@@ -45,6 +45,8 @@ Object::Object() {
 	true_y_ = 0.0;
 	x_ = 0;
 	y_ = 0;
+	vel_x_ = 0;
+	vel_y_ = 0;
 }
 
 Object::~Object() {
@@ -53,7 +55,10 @@ Object::~Object() {
 /*
 		PLAYER OBJECT CLASS
 */
-
+void Object::update(){
+	vel_x_ = 0;
+	vel_y_ = 0;
+}
 void Object::bounce_object(HitBox &test_object_ref){
 	int new_x = x_; int new_y = y_;
 	if (x_ >= test_object_ref.x_ + test_object_ref.width_ + vel_x_ &&
@@ -94,9 +99,7 @@ Player::~Player(){
 }
 
 void Player::update(){
-	vel_x_ = 0;
-	vel_y_ = 0;
-
+	Object::update();
 }
 
 void Player::get_movement(int x, int y){
@@ -126,10 +129,6 @@ Wall::Wall(){
 }
 
 Wall::~Wall(){
-
-}
-
-void Wall::update(){
 
 }
 

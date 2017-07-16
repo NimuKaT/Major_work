@@ -66,6 +66,9 @@ private:
 	std::vector<std::shared_ptr<SpriteSheet>> loaded_sprites_;
 	int shift_x_, shift_y_ = 0;
 
+//	Calculation functions
+	float get_angle_cursor_rel_player(std::weak_ptr<Input_event> &input_data, std::weak_ptr<Player> player);
+
 	void set_paused(bool is_paused);
 	void render_from_queue(std::tuple<int, int, TEXTURE_ID, int> queue);
 	void render_background();

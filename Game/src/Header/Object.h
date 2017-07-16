@@ -29,7 +29,7 @@ class Object : public HitBox {
 public:
 	Object();
 	virtual ~Object();
-	virtual void update() = 0;
+	virtual void update();
 	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
 	void bounce_object(HitBox &test_object_ref);
 
@@ -60,11 +60,7 @@ public:
 	Enemy();
 	~Enemy();
 	void update();
-	void get_movement(int x, int y);
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
-
-private:
-	bool input_states[5];
 
 };
 
@@ -75,10 +71,6 @@ public:
 	void update();
 	void get_movement(int x, int y);
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
-
-private:
-	bool input_states[5];
-
 };
 
 class InteractableObject : public Object{
@@ -86,24 +78,14 @@ public:
 	InteractableObject();
 	~InteractableObject();
 	void update();
-	void get_movement(int x, int y);
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
-
-private:
-	bool input_states[5];
-
 };
 
-class Wall : public Object{
+class Wall : public HitBox{
 public:
 	Wall();
 	~Wall();
-	void update();
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
-
-private:
-	bool input_states[5];
-
 };
 
 #endif /* OBJECT_H_ */

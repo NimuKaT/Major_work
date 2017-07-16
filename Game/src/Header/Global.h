@@ -27,6 +27,7 @@ static const std::string slash="\\";
 static const std::string slash="/";
 #endif
 
+#define PI 3.14159265
 
 //Screen dimension constants
 extern int SCREEN_WIDTH;
