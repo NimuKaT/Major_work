@@ -7,62 +7,42 @@
 
 #include "../Header/GameMenu.h"
 
-GameMenu::GameMenu(SDL_Renderer* renderer_ptr, Input_event* input_ptr) {
+GameMenu::GameMenu(SDL_Renderer* renderer_ptr, std::shared_ptr<Input_event> &input_ptr) {
 	is_paused = false;
+	input_data_ = input_ptr;
+	renderer_ptr_ = renderer_ptr;
+	game_instance = Engine();
+	game_instance.get_data(renderer_ptr_);
+	game_instance.load_stage(STAGE_TEST);
+}
+
+void GameMenu::update_logic(){
+	if (!input_data_.expired()){
+		if (input_data_.lock()->key_pressed[KEY_PRESS_ESC]){
+			if (!is_paused){
+				is_paused = true;
+
+			}
+			else{
+				is_paused = false;
+
+			}
+		}
+
+		if (!is_paused){
+			if(!input_data_.expired()){
+				game_instance.main_loop(input_data_);
+			}
+		}
+	}
 }
 
 
 void GameMenu::render_texture(){
-
-}
-
-void GameMenu::update_logic(){
-	if ( !is_paused ){
-		update_player();
-		update_enemy();
-	}
-	else{
+	std::shared_ptr<Texture> current_game_frame;
+	current_game_frame = game_instance.get_last_texture();
+	current_game_frame->render(0,0);
+	if (!is_paused){
 
 	}
-}
-
-void GameMenu::update_player(){
-	int x = 0;
-	int y = 0;
-	if (input_data_->key_pressed[MOVE_UP] == input_data_->key_pressed[MOVE_DOWN]){
-
-	}
-	else if (input_data_->key_pressed[MOVE_UP]){
-		x = -1;
-	}
-	else if (input_data_->key_pressed[MOVE_DOWN]){
-		x = 1;
-	}
-
-	if (input_data_->key_pressed[MOVE_LEFT] == input_data_->key_pressed[MOVE_RIGHT]){
-
-	}
-	else if (input_data_->key_pressed[MOVE_LEFT]){
-		y = -1;
-	}
-	else if (input_data_->key_pressed[MOVE_RIGHT]){
-		y = 1;
-	}
-	player.get_movement(x, y);
-}
-
-void GameMenu::update_enemy(){
-
-}
-
-void GameMenu::update_stage(){
-
-}
-
-coord GameMenu::check_collision(){
-	return coord();
-}
-
-void GameMenu::pause_menu(){
-
 }

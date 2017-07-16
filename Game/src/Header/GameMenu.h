@@ -10,7 +10,8 @@
 
 #include "global.h"
 #include "Menu.h"
-#include "Object.h"
+#include "Engine.h"
+#include "Texture.h"
 
 struct coord{
 	int x, y;
@@ -26,19 +27,13 @@ enum DEFAULT_CONTROLLS{
 
 class GameMenu : public MenuManager{
 public:
-	GameMenu(SDL_Renderer* renderer_ptr, Input_event* input_ptr);
+	GameMenu(SDL_Renderer* renderer_ptr, std::shared_ptr<Input_event> &input_ptr);
 	void render_texture();
 	void update_logic();
 
 protected:
-	void update_player();
-	void update_enemy();
-	void update_stage();
-	coord check_collision();
-	void pause_menu();
 	void load_stage();
-	Player player;
-	std::vector<std::shared_ptr<Object>> Objects;
+	Engine game_instance;
 
 private:
 	bool is_paused;
