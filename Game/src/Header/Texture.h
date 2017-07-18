@@ -21,7 +21,7 @@ public:
 	void render(int x, int y);
 	void set_as_render_target();
 	SDL_Rect get_rect();
-	void create_blank_texture(int width, int height);
+	void create_blank_texture(int width, int height, Uint8 red = 0x00, Uint8 green = 0x00, Uint8 blue = 0x00, Uint8 alpha = 0x00);
 	void set_renderer(SDL_Renderer* renderer_ptr);
 	void set_texture_alpha(Uint8 alpha);
 	void setBlendMode(SDL_BlendMode mode);

@@ -60,11 +60,11 @@ void Texture::set_as_render_target(){
 	SDL_SetRenderTarget(renderer_ptr_, object_texture_);
 }
 
-void Texture::create_blank_texture(int width, int height){
+void Texture::create_blank_texture(int width, int height, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha){
 	SDL_DestroyTexture(object_texture_);
 	SDL_SetRenderDrawBlendMode(renderer_ptr_, blend_mode_);
 	SDL_SetTextureBlendMode(object_texture_, blend_mode_);
-	SDL_SetRenderDrawColor(renderer_ptr_, 0xFF, 0xFF, 0xFF, 0x00);
+	SDL_SetRenderDrawColor(renderer_ptr_, red, green, blue, alpha);
 	object_texture_ = SDL_CreateTexture(renderer_ptr_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
 	setBlendMode(blend_mode_);
 
@@ -74,6 +74,7 @@ void Texture::create_blank_texture(int width, int height){
 	else{
 		clip_from_texture();
 	}
+	SDL_SetRenderDrawColor(renderer_ptr_, 0xFF, 0xFF, 0xFF, 0xFF);
 }
 
 void Texture::clip_from_texture(){

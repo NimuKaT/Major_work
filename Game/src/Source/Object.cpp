@@ -8,12 +8,32 @@
 #include "../Header/Object.h"
 
 HitBox::HitBox(){
+std::cout<<"copy "<<std::endl;
 	true_x_ = 0;
 	true_y_ = 0;
 	x_ = 0;
 	y_ = 0;
 	width_ = 0;
 	height_ = 0;
+}
+HitBox::HitBox(SDL_Rect rect){
+//	std::cout<<"x: "<<rect.x<<"\ny: "<<rect.y<<"\nwidth: "<<rect.w<<"\nheight: "<<rect.h<<std::endl;
+		true_x_ = rect.x;
+		true_y_ = rect.y;
+		x_ = rect.x;
+		y_ = rect.y;
+		width_ = rect.w;
+		height_ = rect.h;
+}
+
+HitBox::HitBox(int x, int y, int width, int height){
+//	std::cout<<"x: "<<x<<"\ny: "<<y<<"\nwidth: "<<width<<"\nheight: "<<height<<std::endl;
+	true_x_ = x;
+	true_y_ = y;
+	x_ = x;
+	y_ = y;
+	width_ = width;
+	height_ = height;
 }
 
 void HitBox::set_position(int x, int y){
@@ -26,12 +46,12 @@ void HitBox::set_size(int width, int height){
 	height_ = height;
 }
 
-bool HitBox::detect_collision(HitBox &test_object_ref){
+bool HitBox::detect_collision(HitBox& test_object_ref){
 	bool is_hit = false;
-
 	if (x_ < test_object_ref.x_ + test_object_ref.width_ && x_ + width_ > test_object_ref.x_){
 		if(y_ < test_object_ref.y_ + test_object_ref.height_ && y_ + height_ > test_object_ref.y_){
 			is_hit = true;
+//			std::cout<<"hit"<<std::endl;
 		}
 	}
 	return is_hit;
@@ -41,60 +61,85 @@ bool HitBox::detect_collision(HitBox &test_object_ref){
 		OBJECT TEMPLATE CLASS
 */
 Object::Object() {
-	true_x_ = 0.0;
-	true_y_ = 0.0;
-	x_ = 0;
-	y_ = 0;
-	vel_x_ = 0;
-	vel_y_ = 0;
+	object_rect_ = {0, 0, 0, 0};
+	centre_point_ = {0, 0};
+	current_sprites_ = 0;
+	current_frame_ = 0;
+}
+
+HitBox& Object::get_hitbox(){
+	return hit_boxes[current_sprites_][current_frame_];
 }
 
 Object::~Object() {
 	// TODO Auto-generated destructor stub
 }
-void Object::update(){
+
+SDL_Point Object::get_centre(){
+	return {object_rect_.x + (object_rect_.w/2), object_rect_.y + (object_rect_.h/2)};
+}
+MoveableObject::MoveableObject(){
+
+}
+MoveableObject::~MoveableObject(){
+
+}
+void MoveableObject::update(){
 	vel_x_ = 0;
 	vel_y_ = 0;
 }
-void Object::bounce_object(HitBox &test_object_ref){
-	int new_x = x_; int new_y = y_;
-	if (x_ >= test_object_ref.x_ + test_object_ref.width_ + vel_x_ &&
-			x_ <= test_object_ref.x_ + test_object_ref.width_ &&
+Entity::Entity(){
+
+}
+Entity::~Entity(){
+
+}
+void Entity::bounce_object(HitBox& test_object_ref){
+	HitBox* hitbox_ptr = &hit_boxes[current_sprites_][current_frame_];
+	int new_x = object_rect_.x; int new_y = object_rect_.y;
+	if (new_x >= test_object_ref.x_ + test_object_ref.width_ + vel_x_ &&
+			new_x <= test_object_ref.x_ + test_object_ref.width_ &&
 			vel_x_ < 0){
 		new_x = test_object_ref.x_ + test_object_ref.width_;
 	}
-	else if (x_ + width_ >= test_object_ref.x_ &&
-			x_ + width_ <= test_object_ref.x_ + vel_x_ &&
+	else if (new_x + object_rect_.w >= test_object_ref.x_ &&
+			new_x + object_rect_.w <= test_object_ref.x_ + vel_x_ &&
 			vel_x_ > 0){
-		new_x = test_object_ref.x_ - width_;
+		new_x = test_object_ref.x_ - object_rect_.w;
 	}
-	if (y_ >= test_object_ref.y_ + test_object_ref.height_ + vel_y_ &&
-				y_ <= test_object_ref.y_ + test_object_ref.height_ &&
+	if (new_y >= test_object_ref.y_ + test_object_ref.height_ + vel_y_ &&
+			new_y <= test_object_ref.y_ + test_object_ref.height_ &&
 				vel_y_ < 0){
 		new_y = test_object_ref.y_ + test_object_ref.height_;
 	}
-	else if (y_ + height_ >= test_object_ref.y_ &&
-			y_ + height_ <= test_object_ref.y_ + vel_y_ &&
+	else if (new_y + object_rect_.h >= test_object_ref.y_ &&
+			new_y + object_rect_.h <= test_object_ref.y_ + vel_y_ &&
 			vel_y_ > 0){
-		new_y = test_object_ref.y_ - height_;
+		new_y = test_object_ref.y_ - object_rect_.h;
 
 	}
-	x_ = new_x;
-	y_ = new_y;
-	true_x_ = x_;
-	true_y_ = y_;
+	object_rect_.x = new_x;
+	object_rect_.y = new_y;
+	true_x_ = object_rect_.x;
+	true_y_ = object_rect_.y;
 	vel_x_ = 0;
 	vel_y_ = 0;
+	hit_boxes[current_frame_][current_frame_].set_position(object_rect_.x, object_rect_.y);
 }
 
 /*
  * 			PLAYER OBJECT
  */
 Player::Player(){
-	width_ = 100;
-	height_ = 100;
+	object_rect_.w = 100;
+	object_rect_.h = 100;
 	gun_cooldown_ticks_ = 0;
 	can_shoot_ = true;
+
+	object_rect_ = {0, 0, object_rect_.w, object_rect_.h};
+	hit_boxes.resize(1);
+	hit_boxes.push_back(std::vector<HitBox>());
+	hit_boxes[0].push_back(HitBox(0, 0, object_rect_.w, object_rect_.h));
 }
 
 Player::~Player(){
@@ -102,7 +147,7 @@ Player::~Player(){
 }
 
 void Player::update(){
-	Object::update();
+//	MoveableObject::update();
 	if (!can_shoot_){
 		gun_cooldown_ticks_--;
 		if(!gun_cooldown_ticks_){
@@ -114,8 +159,9 @@ void Player::update(){
 void Player::get_movement(int x, int y){
 	true_x_ += x;
 	true_y_ += y;
-	x_ = round(true_x_);
-	y_ = round(true_y_);
+	object_rect_.x = round(true_x_);
+	object_rect_.y = round(true_y_);
+	hit_boxes[current_frame_][current_frame_].set_position(object_rect_.x, object_rect_.y);
 	if (x){
 		vel_x_ = x;
 	}
@@ -127,7 +173,7 @@ void Player::get_movement(int x, int y){
 std::tuple<int, int, TEXTURE_ID, int> Player::get_queue(){
 	vel_x_ = 0;
 	vel_y_ = 0;
-	return std::make_tuple(x_, y_, TEST_BALL, BALL_GREEN);
+	return std::make_tuple(object_rect_.x, object_rect_.y, TEST_BALL, BALL_GREEN);
 }
 
 std::vector<std::shared_ptr<Bullet>> Player::shoot_gun(float true_angle){
@@ -135,7 +181,9 @@ std::vector<std::shared_ptr<Bullet>> Player::shoot_gun(float true_angle){
 	if (can_shoot_){
 		gun_cooldown_ticks_ = 30;
 		can_shoot_ = false;
-		bullet_pellet.push_back(std::make_shared<Bullet>(x_+(width_/2), (y_+height_/2), cos(true_angle/180*PI)*10, -sin(true_angle/180*PI)*10));
+		bullet_pellet.push_back(std::make_shared<Bullet>(object_rect_.x+(object_rect_.w/2),
+				(object_rect_.y+object_rect_.h/2),
+				cos(true_angle/180*PI)*10, -sin(true_angle/180*PI)*10));
 	}
 	return bullet_pellet;
 }
@@ -158,31 +206,39 @@ std::tuple<int, int, TEXTURE_ID, int> Enemy::get_queue(){
  * 			Bullet Class
  */
 Bullet::Bullet(int initial_x, int initial_y, int vel_x, int vel_y){
-	width_ = 50;
-	height_ = 50;
-	x_ = initial_x;
-	y_ = initial_y;
+	object_rect_.w = 50;
+	object_rect_.h = 50;
+	object_rect_.x = initial_x;
+	object_rect_.y = initial_y;
 	vel_x_ = vel_x;
 	vel_y_ = vel_y;
-	true_angle = atan2(-vel_y_, vel_x_) / PI * 180;
+	SDL_angle_ = atan2(vel_y_, vel_x_) / PI * 180;
+
+	hit_boxes.resize(1);
+	hit_boxes.push_back(std::vector<HitBox>());
+	hit_boxes[0].push_back(HitBox(object_rect_));
 }
 Bullet::~Bullet(){
 
 }
 void Bullet::update(){
-	x_ += vel_x_;
-	y_ += vel_y_;
+	object_rect_.x += vel_x_;
+	object_rect_.y += vel_y_;
+	hit_boxes[current_sprites_][current_frame_].set_position(object_rect_.x, object_rect_.y);
 }
 
 std::tuple<int, int, TEXTURE_ID, int> Bullet::get_queue(){
-	return std::make_tuple(x_, y_, BULLET, 0);
+	return std::make_tuple(object_rect_.x, object_rect_.y, BULLET, 0);
 }
 
 /*
  * 			WALL OBJECT
  */
-Wall::Wall(){
-
+Wall::Wall(int x, int y, Uint32 width, Uint32 height){
+	object_rect_ = {x, y, width, height};
+	hit_boxes.resize(1);
+	hit_boxes.push_back(std::vector<HitBox>());
+	hit_boxes[0].push_back(HitBox(x, y, width, height));
 }
 
 Wall::~Wall(){
@@ -190,7 +246,7 @@ Wall::~Wall(){
 }
 
 std::tuple<int, int, TEXTURE_ID, int> Wall::get_queue(){
-	return std::make_tuple(x_, y_, PLAYER, 0);
+	return std::make_tuple(object_rect_.x, object_rect_.y, PLAYER, 0);
 }
 
 

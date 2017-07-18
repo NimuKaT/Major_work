@@ -56,10 +56,16 @@ private:
 	SDL_Renderer* renderer_ptr_;
 //	Game objects
 	std::vector<std::weak_ptr<Object>> object_list_;
-	std::vector<std::shared_ptr<Player>> player_objects_;
-	std::vector<std::shared_ptr<Enemy>> enemy_objects_;
+	std::vector<std::weak_ptr<MoveableObject>> moveable_list_;
+	std::vector<std::weak_ptr<Entity>> entity_list_;
+
+
 	std::vector<std::shared_ptr<Wall>> wall_objects_;
+
+	std::vector<std::shared_ptr<Player>> player_objects_;
 	std::vector<std::shared_ptr<Bullet>> player_bullets_;
+
+	std::vector<std::shared_ptr<Enemy>> enemy_objects_;
 	std::vector<std::shared_ptr<Bullet>> enemy_bullets_;
 //	Render objects
 //	Texture temp_texture;

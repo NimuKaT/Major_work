@@ -40,14 +40,12 @@ bool Engine::load_stage(STAGE_ID stage_id){
 //			Object initilisation
 //				Player
 			player_objects_.push_back(std::make_shared<Player>());
-			object_list_.push_back(player_objects_.back());
+			moveable_list_.push_back(player_objects_.back());
 //				Enemy
 
 
 //				Wall
-			wall_objects_.push_back(std::make_shared<Wall>());
-			wall_objects_.back()->set_position(200, 200);
-			wall_objects_.back()->set_size(100, 100);
+			wall_objects_.push_back(std::make_shared<Wall>(200, 200, 100, 100));
 //			object_list_.push_back(wall_objects_.back());
 
 
@@ -112,23 +110,31 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 			}
 		}
 	}
+
+	for (auto Mobject : moveable_list_){
+		if (!Mobject.expired()){
+			Mobject.lock()->update();
+		}
+	}
+
 	for(auto &bullet : player_bullets_){
 		bullet->update();
 	}
 
 
+
 //	Collision functions with all moving objects and walls
 	for(auto &player : player_objects_){
 		for(auto &wall : wall_objects_){
-			if (player->detect_collision(*wall)){
-				player->bounce_object(*wall);
+			if (player->get_hitbox().detect_collision(wall->get_hitbox())){
+				player->bounce_object(wall->get_hitbox());
 			}
 		}
 	}
 //	Collision functions with player and Enemy/Enemy bullets
 	for(auto &player : player_objects_){
 		for(auto &enemy_bullet : enemy_bullets_){
-			if (player->detect_collision(*enemy_bullet)){
+			if (player->get_hitbox().detect_collision(enemy_bullet->get_hitbox())){
 
 
 			}
@@ -141,7 +147,7 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 			it != player_bullets_.end();){
 		bool is_deleted = false;
 		for(auto &wall : wall_objects_){
-			if (it->get()->detect_collision(*wall)){
+			if (it->get()->get_hitbox().detect_collision(wall->get_hitbox())){
 					it = player_bullets_.erase(it);
 					is_deleted = true;
 					break;
@@ -157,14 +163,10 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 
 
 
-	std::cout<<get_angle_cursor_rel_player(input_data, player_objects_[0])<<std::endl;
+//	std::cout<<get_angle_cursor_rel_player(input_data, player_objects_[0])<<std::endl;
 
 
-	for (auto object : object_list_){
-		if (!object.expired()){
-			object.lock()->update();
-		}
-	}
+
 
 
 }
@@ -172,16 +174,16 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 float Engine::get_angle_cursor_rel_player(std::weak_ptr<Input_event> &input_data, std::weak_ptr<Player> player){
 	float angle = 0.0;
 	if (!input_data.expired() && !player.expired()){
-		int x = input_data.lock()->mouse_x - (player.lock()->x_ + player.lock()->width_ + shift_x_);
-		int y = -(input_data.lock()->mouse_y - (player.lock()->y_ + player.lock()->height_ + shift_y_));
-		angle = atan2(y,x) / PI * 180;
+		SDL_Point player_coord = player.lock()->get_centre();
+		angle = atan2(-(input_data.lock()->mouse_y - (player_coord.y + shift_y_)),
+				input_data.lock()->mouse_x - (player_coord.x +shift_x_)) / PI * 180;
 	}
 	return angle;
 }
 
 
 void Engine::render_from_queue(std::tuple<int, int, TEXTURE_ID, int> queue){
-	std::cout<<"x: "<<std::get<0>(queue) + shift_x_<<"\ny: "<<std::get<1>(queue) + shift_y_<<"\nImage_ID: "<<std::get<2>(queue)<<"\nRect_ID"<<std::get<3>(queue)<<std::endl;
+//	std::cout<<"x: "<<std::get<0>(queue) + shift_x_<<"\ny: "<<std::get<1>(queue) + shift_y_<<"\nImage_ID: "<<std::get<2>(queue)<<"\nRect_ID"<<std::get<3>(queue)<<std::endl;
 	loaded_sprites_[std::get<2>(queue)]->render(std::get<0>(queue) + shift_x_, std::get<1>(queue) + shift_y_, std::get<3>(queue), 0.0);
 }
 
