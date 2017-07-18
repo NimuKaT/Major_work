@@ -52,9 +52,6 @@ Object::Object() {
 Object::~Object() {
 	// TODO Auto-generated destructor stub
 }
-/*
-		PLAYER OBJECT CLASS
-*/
 void Object::update(){
 	vel_x_ = 0;
 	vel_y_ = 0;
@@ -89,9 +86,15 @@ void Object::bounce_object(HitBox &test_object_ref){
 	vel_x_ = 0;
 	vel_y_ = 0;
 }
+
+/*
+ * 			PLAYER OBJECT
+ */
 Player::Player(){
 	width_ = 100;
 	height_ = 100;
+	gun_cooldown_ticks_ = 0;
+	can_shoot_ = true;
 }
 
 Player::~Player(){
@@ -100,6 +103,12 @@ Player::~Player(){
 
 void Player::update(){
 	Object::update();
+	if (!can_shoot_){
+		gun_cooldown_ticks_--;
+		if(!gun_cooldown_ticks_){
+			can_shoot_ = true;
+		}
+	}
 }
 
 void Player::get_movement(int x, int y){
@@ -121,8 +130,56 @@ std::tuple<int, int, TEXTURE_ID, int> Player::get_queue(){
 	return std::make_tuple(x_, y_, TEST_BALL, BALL_GREEN);
 }
 
+std::vector<std::shared_ptr<Bullet>> Player::shoot_gun(float true_angle){
+	std::vector<std::shared_ptr<Bullet>> bullet_pellet;
+	if (can_shoot_){
+		gun_cooldown_ticks_ = 30;
+		can_shoot_ = false;
+		bullet_pellet.push_back(std::make_shared<Bullet>(x_+(width_/2), (y_+height_/2), cos(true_angle/180*PI)*10, -sin(true_angle/180*PI)*10));
+	}
+	return bullet_pellet;
+}
 /*
- * 		WALL OBJECT
+ * 			ENEMY OBJECT TEMPLATE CLASS
+ */
+Enemy::Enemy(){
+
+}
+Enemy::~Enemy(){
+
+}
+void Enemy::update(){
+
+}
+std::tuple<int, int, TEXTURE_ID, int> Enemy::get_queue(){
+
+}
+/*
+ * 			Bullet Class
+ */
+Bullet::Bullet(int initial_x, int initial_y, int vel_x, int vel_y){
+	width_ = 50;
+	height_ = 50;
+	x_ = initial_x;
+	y_ = initial_y;
+	vel_x_ = vel_x;
+	vel_y_ = vel_y;
+	true_angle = atan2(-vel_y_, vel_x_) / PI * 180;
+}
+Bullet::~Bullet(){
+
+}
+void Bullet::update(){
+	x_ += vel_x_;
+	y_ += vel_y_;
+}
+
+std::tuple<int, int, TEXTURE_ID, int> Bullet::get_queue(){
+	return std::make_tuple(x_, y_, BULLET, 0);
+}
+
+/*
+ * 			WALL OBJECT
  */
 Wall::Wall(){
 

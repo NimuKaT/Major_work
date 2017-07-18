@@ -62,8 +62,11 @@ void init_image_data(){
 	IMAGE_PATHS[TEST_BALL] = "Assets"+slash+"Images"+slash+"test_balls.png";
 	IMAGE_PATHS[TEST_UI_ELEMENT] = "Assets"+slash+"Images"+slash+"test_UI_element.png";
 	IMAGE_PATHS[TEST] = "Assets"+slash+"Images"+slash+"test.png";
+	IMAGE_PATHS[BULLET] = "Assets"+slash+"Images"+slash+"bullet.png";
 
 	IMAGE_RECTS[PLAYER].push_back(SDL_Rect{0, 0, 100, 100});
+
+	IMAGE_RECTS[TEMP_MAIN_MENU_BACKGROUND].push_back(SDL_Rect{0, 0, 3840, 2160});
 
 	IMAGE_RECTS[TEST_BALL].resize(BALL_LENGTH);
 	IMAGE_RECTS[TEST_BALL][BALL_RED] = SDL_Rect{0, 0, 100, 100};
@@ -73,4 +76,8 @@ void init_image_data(){
 
 	IMAGE_RECTS[TEST_UI_ELEMENT].resize(1);
 	IMAGE_RECTS[TEST_UI_ELEMENT][0] = SDL_Rect{0, 0, 650, 150};
+
+	IMAGE_RECTS[TEST].push_back(SDL_Rect{0, 0, 50, 50});
+
+	IMAGE_RECTS[BULLET].push_back(SDL_Rect{0, 0, 50, 50});
 }

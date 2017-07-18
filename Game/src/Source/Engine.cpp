@@ -61,6 +61,10 @@ bool Engine::load_stage(STAGE_ID stage_id){
 			loaded_sprites_[TEST_BALL]->set_renderer(renderer_ptr_);
 			loaded_sprites_[TEST_BALL]->set_image_path(IMAGE_PATHS[TEST_BALL]);
 			loaded_sprites_[TEST_BALL]->set_sprite_rects(IMAGE_RECTS[TEST_BALL]);
+			loaded_sprites_[BULLET] = std::make_shared<SpriteSheet>();
+			loaded_sprites_[BULLET]->set_renderer(renderer_ptr_);
+			loaded_sprites_[BULLET]->set_image_path(IMAGE_PATHS[BULLET]);
+			loaded_sprites_[BULLET]->set_sprite_rects(IMAGE_RECTS[BULLET]);
 
 		}
 	}
@@ -99,7 +103,20 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 		if (input->key_pressed[KEY_PRESS_RIGHT]){
 			test_camera_.displace(temp_camera_step_size, 0);
 		}
+
+
+		if (input->key_pressed[KEY_PRESS_MB_1]){
+			auto new_bullets = player_objects_[0]->shoot_gun(get_angle_cursor_rel_player(input_data, player_objects_[0]));
+			if(!new_bullets.empty()){
+				player_bullets_.insert(player_bullets_.end(), new_bullets.begin(), new_bullets.end());
+			}
+		}
 	}
+	for(auto &bullet : player_bullets_){
+		bullet->update();
+	}
+
+
 //	Collision functions with all moving objects and walls
 	for(auto &player : player_objects_){
 		for(auto &wall : wall_objects_){
@@ -110,14 +127,35 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 	}
 //	Collision functions with player and Enemy/Enemy bullets
 	for(auto &player : player_objects_){
-		for(auto &enemy : enemy_objects_){
-			if (player->detect_collision(*enemy)){
+		for(auto &enemy_bullet : enemy_bullets_){
+			if (player->detect_collision(*enemy_bullet)){
 
 
 			}
 		}
 	}
 //	Collision functions with enemy and player bullets
+
+//	Collision of bullets with walls
+	for(std::vector<std::shared_ptr<Bullet>>::iterator it=player_bullets_.begin();
+			it != player_bullets_.end();){
+		bool is_deleted = false;
+		for(auto &wall : wall_objects_){
+			if (it->get()->detect_collision(*wall)){
+					it = player_bullets_.erase(it);
+					is_deleted = true;
+					break;
+			}
+		}
+		if(!is_deleted){
+			it++;
+		}
+	}
+
+
+
+
+
 
 	std::cout<<get_angle_cursor_rel_player(input_data, player_objects_[0])<<std::endl;
 
@@ -152,11 +190,15 @@ void Engine::render_background(){
 }
 
 void Engine::render_player_type_objects(){
+
+	for (auto &enemy_object : enemy_objects_){
+		render_from_queue(enemy_object->get_queue());
+	}
 	for (auto &player_object : player_objects_){
 		render_from_queue(player_object->get_queue());
 	}
-	for (auto &enemy_object : enemy_objects_){
-			render_from_queue(enemy_object->get_queue());
+	for (auto &bullet_object : player_bullets_){
+		render_from_queue(bullet_object->get_queue());
 	}
 }
 

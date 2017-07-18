@@ -42,6 +42,19 @@ protected:
 
 };
 
+class Bullet : public Object{
+public:
+	Bullet(int x, int y, int vel_x, int vel_y);
+	~Bullet();
+	void update();
+	void get_movement(int x, int y);
+	std::tuple<int, int, TEXTURE_ID, int> get_queue();
+protected:
+	float true_angle = 0.0;
+	int vel_x_ = 0;
+	int vel_y_ = 0;
+};
+
 class Player : public Object{
 public:
 	Player();
@@ -49,8 +62,11 @@ public:
 	void update();
 	void get_movement(int x, int y);
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
+	std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle);
 
 private:
+	Uint32 gun_cooldown_ticks_ = 0;
+	bool can_shoot_ = true;
 	bool input_states[5];
 
 };
@@ -62,15 +78,7 @@ public:
 	void update();
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
 
-};
 
-class Bullet : public Object{
-public:
-	Bullet();
-	~Bullet();
-	void update();
-	void get_movement(int x, int y);
-	std::tuple<int, int, TEXTURE_ID, int> get_queue();
 };
 
 class InteractableObject : public Object{

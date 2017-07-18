@@ -59,6 +59,8 @@ private:
 	std::vector<std::shared_ptr<Player>> player_objects_;
 	std::vector<std::shared_ptr<Enemy>> enemy_objects_;
 	std::vector<std::shared_ptr<Wall>> wall_objects_;
+	std::vector<std::shared_ptr<Bullet>> player_bullets_;
+	std::vector<std::shared_ptr<Bullet>> enemy_bullets_;
 //	Render objects
 //	Texture temp_texture;
 	std::shared_ptr<Texture> master_texture_;
