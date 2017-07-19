@@ -39,13 +39,17 @@ bool Engine::load_stage(STAGE_ID stage_id){
 
 //			Object initilisation
 //				Player
-			player_objects_.push_back(std::make_shared<Player>());
+			player_objects_.push_back(std::make_shared<Player>(SDL_Point {1920, 1080}));
 			moveable_list_.push_back(player_objects_.back());
 //				Enemy
 
 
 //				Wall
 			wall_objects_.push_back(std::make_shared<Wall>(200, 200, 100, 100));
+			wall_objects_.push_back(std::make_shared<Wall>(-200, -50, 200, 2160+100));
+			wall_objects_.push_back(std::make_shared<Wall>(3840, 2160, 200, 2160+100));
+			wall_objects_.push_back(std::make_shared<Wall>( -50, -200, 3840+100, 200));
+			wall_objects_.push_back(std::make_shared<Wall>( -50, 2160, 3840+100, 200));
 //			object_list_.push_back(wall_objects_.back());
 
 
@@ -86,6 +90,9 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 		}
 		if (input->key_pressed[KEY_PRESS_D]){
 			player_objects_[0]->get_movement(temp_camera_step_size, 0);
+		}
+		if (input->key_pressed[KEY_PRESS_R]){
+			player_objects_[0]->reload();
 		}
 
 

@@ -13,10 +13,6 @@
 #include "Engine.h"
 #include "Texture.h"
 
-struct coord{
-	int x, y;
-};
-
 enum DEFAULT_CONTROLLS{
 	MOVE_UP = KEY_PRESS_W,
 	MOVE_DOWN = KEY_PRESS_S,

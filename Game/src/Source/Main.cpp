@@ -83,6 +83,10 @@ void get_input(SDL_Event& event, std::shared_ptr<Input_event> &input_data, bool 
 						input_data->key_pressed[KEY_PRESS_D] = event.key.state;
 						break;
 					}
+					case SDLK_r:{
+						input_data->key_pressed[KEY_PRESS_R] = event.key.state;
+						break;
+										}
 					case SDLK_UP:{
 						input_data->key_pressed[KEY_PRESS_UP] = event.key.state;
 						break;

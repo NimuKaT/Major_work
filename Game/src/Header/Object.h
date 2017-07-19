@@ -9,6 +9,10 @@
 #define OBJECT_H_
 
 #include "Global.h"
+#include "Weapon.h"
+
+class Weapon;
+class MiniGun;
 
 class HitBox2 {
 public:
@@ -72,17 +76,7 @@ public:
 protected:
 	float true_x_, true_y_;
 	int vel_x_, vel_y_;
-	float SDL_angle_; // Angle in
-};
-
-class Entity : public MoveableObject{
-public:
-	Entity();
-	~Entity();
-	virtual void update() = 0;
-	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
-	void bounce_object(HitBox& test_object_ref);
-
+	float SDL_angle_; // Angle using SDL's grid system
 };
 
 class Bullet : public MoveableObject{
@@ -97,19 +91,32 @@ protected:
 	int vel_y_ = 0;
 };
 
+class Entity : public MoveableObject{
+public:
+	Entity();
+	~Entity();
+	virtual void update() = 0;
+	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
+	virtual std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle) = 0;
+	void bounce_object(HitBox& test_object_ref);
+
+};
+
 class Player : public Entity{
 public:
-	Player();
+	Player(SDL_Point spwan_point);
 	~Player();
 	void update();
 	void get_movement(int x, int y);
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
 	std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle);
+	void reload();
 
 private:
 	Uint32 gun_cooldown_ticks_ = 0;
 	bool can_shoot_ = true;
 	bool input_states[5];
+	std::unique_ptr<Weapon> current_weapon;
 
 };
 
@@ -117,7 +124,7 @@ class Enemy : public Entity{
 public:
 	Enemy();
 	~Enemy();
-	void update();
+	virtual void update() = 0;
 	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
 
 
@@ -125,10 +132,23 @@ public:
 
 class EnemySentry : Enemy{
 public:
-
+	EnemySentry(SDL_Point spawn_coord);
+	~EnemySentry();
+	void update();
+	std::tuple<int, int, TEXTURE_ID, int> get_queue();
+	std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle);
 protected:
 
 private:
+	Uint16 ammo_capacity = 250;
+	Uint16 reload_time = 1000;
+	Uint16 gun_cooldown_ticks_ = 0;
+	Uint16 weapon_cooldown_length_ = 4;
+	Uint8 weapon_bullet_velocity_ = 22;
+	Uint8 bullets_shot = 1;
+	Uint16 ticks_to_max_spread = 120;
+	float bullet_spread = 20.0;
+
 };
 
 class InteractableObject : public Object{
@@ -145,5 +165,8 @@ public:
 	~Wall();
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
 };
+
+
+
 
 #endif /* OBJECT_H_ */

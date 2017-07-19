@@ -58,7 +58,7 @@ bool HitBox::detect_collision(HitBox& test_object_ref){
 }
 
 /*
-		OBJECT TEMPLATE CLASS
+			OBJECT TEMPLATE CLASS
 */
 Object::Object() {
 	object_rect_ = {0, 0, 0, 0};
@@ -78,6 +78,10 @@ Object::~Object() {
 SDL_Point Object::get_centre(){
 	return {object_rect_.x + (object_rect_.w/2), object_rect_.y + (object_rect_.h/2)};
 }
+
+/*
+ * 			MovableObject Template class
+ */
 MoveableObject::MoveableObject(){
 
 }
@@ -88,6 +92,10 @@ void MoveableObject::update(){
 	vel_x_ = 0;
 	vel_y_ = 0;
 }
+
+/*
+ * 			Entity Template class
+ */
 Entity::Entity(){
 
 }
@@ -122,88 +130,15 @@ void Entity::bounce_object(HitBox& test_object_ref){
 	object_rect_.y = new_y;
 	true_x_ = object_rect_.x;
 	true_y_ = object_rect_.y;
+	centre_point_.x = object_rect_.x + (object_rect_.w/2);
+	centre_point_.y = object_rect_.y + (object_rect_.h/2);
 	vel_x_ = 0;
 	vel_y_ = 0;
 	hit_boxes[current_frame_][current_frame_].set_position(object_rect_.x, object_rect_.y);
 }
 
 /*
- * 			PLAYER OBJECT
- */
-Player::Player(){
-	object_rect_.w = 100;
-	object_rect_.h = 100;
-	gun_cooldown_ticks_ = 0;
-	can_shoot_ = true;
-
-	object_rect_ = {0, 0, object_rect_.w, object_rect_.h};
-	hit_boxes.resize(1);
-	hit_boxes.push_back(std::vector<HitBox>());
-	hit_boxes[0].push_back(HitBox(0, 0, object_rect_.w, object_rect_.h));
-}
-
-Player::~Player(){
-
-}
-
-void Player::update(){
-//	MoveableObject::update();
-	if (!can_shoot_){
-		gun_cooldown_ticks_--;
-		if(!gun_cooldown_ticks_){
-			can_shoot_ = true;
-		}
-	}
-}
-
-void Player::get_movement(int x, int y){
-	true_x_ += x;
-	true_y_ += y;
-	object_rect_.x = round(true_x_);
-	object_rect_.y = round(true_y_);
-	hit_boxes[current_frame_][current_frame_].set_position(object_rect_.x, object_rect_.y);
-	if (x){
-		vel_x_ = x;
-	}
-	if (y){
-		vel_y_ = y;
-	}
-}
-
-std::tuple<int, int, TEXTURE_ID, int> Player::get_queue(){
-	vel_x_ = 0;
-	vel_y_ = 0;
-	return std::make_tuple(object_rect_.x, object_rect_.y, TEST_BALL, BALL_GREEN);
-}
-
-std::vector<std::shared_ptr<Bullet>> Player::shoot_gun(float true_angle){
-	std::vector<std::shared_ptr<Bullet>> bullet_pellet;
-	if (can_shoot_){
-		gun_cooldown_ticks_ = 30;
-		can_shoot_ = false;
-		bullet_pellet.push_back(std::make_shared<Bullet>(object_rect_.x+(object_rect_.w/2),
-				(object_rect_.y+object_rect_.h/2),
-				cos(true_angle/180*PI)*10, -sin(true_angle/180*PI)*10));
-	}
-	return bullet_pellet;
-}
-/*
- * 			ENEMY OBJECT TEMPLATE CLASS
- */
-Enemy::Enemy(){
-
-}
-Enemy::~Enemy(){
-
-}
-void Enemy::update(){
-
-}
-std::tuple<int, int, TEXTURE_ID, int> Enemy::get_queue(){
-
-}
-/*
- * 			Bullet Class
+ * 			BULLET CLASS
  */
 Bullet::Bullet(int initial_x, int initial_y, int vel_x, int vel_y){
 	object_rect_.w = 50;
@@ -224,11 +159,133 @@ Bullet::~Bullet(){
 void Bullet::update(){
 	object_rect_.x += vel_x_;
 	object_rect_.y += vel_y_;
+	centre_point_.x = object_rect_.x + (object_rect_.w/2);
+	centre_point_.y = object_rect_.y + (object_rect_.h/2);
 	hit_boxes[current_sprites_][current_frame_].set_position(object_rect_.x, object_rect_.y);
 }
 
 std::tuple<int, int, TEXTURE_ID, int> Bullet::get_queue(){
 	return std::make_tuple(object_rect_.x, object_rect_.y, BULLET, 0);
+}
+
+/*
+ * 			PLAYER OBJECT
+ */
+Player::Player(SDL_Point spawn_point){
+	centre_point_ = spawn_point;
+	object_rect_.w = 100;
+	object_rect_.h = 100;
+	object_rect_.x = centre_point_.x - (object_rect_.w/2);
+	object_rect_.y = centre_point_.y - (object_rect_.h/2);
+	true_x_ = object_rect_.x;
+	true_y_ = object_rect_.y;
+
+	SDL_angle_ = 0.0;
+	gun_cooldown_ticks_ = 0;
+	can_shoot_ = true;
+
+
+	hit_boxes.resize(1);
+	hit_boxes.push_back(std::vector<HitBox>());
+	hit_boxes[0].push_back(HitBox(0, 0, object_rect_.w, object_rect_.h));
+
+
+	current_weapon = std::unique_ptr<Weapon>(new Pistol());
+}
+
+Player::~Player(){
+
+}
+
+void Player::update(){
+//	MoveableObject::update();
+	if (!can_shoot_){
+		gun_cooldown_ticks_--;
+		if(!gun_cooldown_ticks_){
+			can_shoot_ = true;
+		}
+	}
+	current_weapon->add_tick();
+}
+
+void Player::get_movement(int x, int y){
+	true_x_ += x;
+	true_y_ += y;
+	object_rect_.x = round(true_x_);
+	object_rect_.y = round(true_y_);
+	centre_point_.x = object_rect_.x + (object_rect_.w/2);
+	centre_point_.y = object_rect_.y + (object_rect_.h/2);
+	hit_boxes[current_frame_][current_frame_].set_position(object_rect_.x, object_rect_.y);
+	if (x){
+		vel_x_ = x;
+	}
+	if (y){
+		vel_y_ = y;
+	}
+}
+
+std::tuple<int, int, TEXTURE_ID, int> Player::get_queue(){
+	vel_x_ = 0;
+	vel_y_ = 0;
+	return std::make_tuple(object_rect_.x, object_rect_.y, TEST_BALL, BALL_GREEN);
+}
+
+std::vector<std::shared_ptr<Bullet>> Player::shoot_gun(float true_angle){
+	std::vector<std::shared_ptr<Bullet>> bullet_pellet;
+	if (current_weapon->shoot_weapon()){
+		bullet_pellet = current_weapon->get_bullet_shot(centre_point_, -true_angle);
+//		gun_cooldown_ticks_ = 30;
+//		can_shoot_ = false;
+//		bullet_pellet.push_back(std::make_shared<Bullet>(object_rect_.x+(object_rect_.w/2),
+//				(object_rect_.y+object_rect_.h/2),
+//				cos(true_angle/180*PI)*10, -sin(true_angle/180*PI)*10));
+	}
+	return bullet_pellet;
+}
+void Player::reload(){
+	current_weapon->reload_weapon();
+}
+
+/*
+ * 			ENEMY OBJECT TEMPLATE CLASS
+ */
+Enemy::Enemy(){
+
+}
+Enemy::~Enemy(){
+
+}
+void Enemy::update(){
+
+}
+
+/*
+ * 			ENEMY TYPE SENTRY CLASS
+ */
+EnemySentry::EnemySentry(SDL_Point spawn_point){
+	centre_point_ = spawn_point;
+	object_rect_.w = 100;
+	object_rect_.h = 100;
+	object_rect_.x = centre_point_.x - (object_rect_.w/2);
+	object_rect_.y = centre_point_.y - (object_rect_.h/2);
+	SDL_angle_ = 0.0;
+
+	hit_boxes.resize(1);
+	hit_boxes.push_back(std::vector<HitBox>());
+	hit_boxes[0].push_back(HitBox(0, 0, object_rect_.w, object_rect_.h));
+}
+EnemySentry::~EnemySentry(){
+
+}
+
+void EnemySentry::update(){
+
+}
+std::tuple<int, int, TEXTURE_ID, int> EnemySentry::get_queue(){
+
+}
+std::vector<std::shared_ptr<Bullet>> EnemySentry::shoot_gun(float true_angle){
+
 }
 
 /*
@@ -248,10 +305,6 @@ Wall::~Wall(){
 std::tuple<int, int, TEXTURE_ID, int> Wall::get_queue(){
 	return std::make_tuple(object_rect_.x, object_rect_.y, PLAYER, 0);
 }
-
-
-
-
 
 
 
