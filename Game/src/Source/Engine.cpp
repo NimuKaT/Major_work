@@ -42,14 +42,18 @@ bool Engine::load_stage(STAGE_ID stage_id){
 			player_objects_.push_back(std::make_shared<Player>(SDL_Point {1920, 1080}));
 			moveable_list_.push_back(player_objects_.back());
 //				Enemy
-
+			enemy_objects_.push_back(std::shared_ptr<Enemy>(new EnemySentry(SDL_Point {3000, 2000})));
+//			moveable_list_.push_back(enemy_objects_.back());
 
 //				Wall
 			wall_objects_.push_back(std::make_shared<Wall>(200, 200, 100, 100));
-			wall_objects_.push_back(std::make_shared<Wall>(-200, -50, 200, 2160+100));
-			wall_objects_.push_back(std::make_shared<Wall>(3840, 2160, 200, 2160+100));
-			wall_objects_.push_back(std::make_shared<Wall>( -50, -200, 3840+100, 200));
-			wall_objects_.push_back(std::make_shared<Wall>( -50, 2160, 3840+100, 200));
+			wall_objects_.push_back(std::make_shared<Wall>(-200, -50, 200, 2160+200));
+			wall_objects_.push_back(std::make_shared<Wall>(3840, -50, 200, 2160+200));
+			wall_objects_.push_back(std::make_shared<Wall>( -50, -200, 3840+200, 200));
+			wall_objects_.push_back(std::make_shared<Wall>( -50, 2160, 3840+200, 200));
+			wall_drawer = std::make_shared<Texture>();
+			wall_drawer->set_renderer(renderer_ptr_);
+			wall_drawer->setBlendMode(SDL_BLENDMODE_NONE);
 //			object_list_.push_back(wall_objects_.back());
 
 
@@ -118,13 +122,31 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 		}
 	}
 
-	for (auto Mobject : moveable_list_){
-		if (!Mobject.expired()){
-			Mobject.lock()->update();
+//	for (auto Mobject : moveable_list_){
+//		if (!Mobject.expired()){
+//			Mobject.lock()->update();
+//		}
+//	}
+	for(auto &player : player_objects_){
+		player->update();
+	}
+
+	for(auto &enemy : enemy_objects_){
+		enemy->update();
+		if (enemy->is_weapon_triggered()){
+			auto new_bullets = enemy->shoot_weapon();
+			if(!new_bullets.empty()){
+				enemy_bullets_.insert(enemy_bullets_.end(), new_bullets.begin(), new_bullets.end());
+			}
 		}
 	}
 
+
 	for(auto &bullet : player_bullets_){
+		bullet->update();
+	}
+
+	for(auto &bullet : enemy_bullets_){
 		bullet->update();
 	}
 
@@ -142,7 +164,7 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 	for(auto &player : player_objects_){
 		for(auto &enemy_bullet : enemy_bullets_){
 			if (player->get_hitbox().detect_collision(enemy_bullet->get_hitbox())){
-
+				std::cout<<"player got shot"<<std::endl;
 
 			}
 		}
@@ -156,6 +178,20 @@ void Engine::main_loop(std::weak_ptr<Input_event> &input_data){
 		for(auto &wall : wall_objects_){
 			if (it->get()->get_hitbox().detect_collision(wall->get_hitbox())){
 					it = player_bullets_.erase(it);
+					is_deleted = true;
+					break;
+			}
+		}
+		if(!is_deleted){
+			it++;
+		}
+	}
+	for(std::vector<std::shared_ptr<Bullet>>::iterator it=enemy_bullets_.begin();
+		it != enemy_bullets_.end();){
+		bool is_deleted = false;
+		for(auto &wall : wall_objects_){
+			if (it->get()->get_hitbox().detect_collision(wall->get_hitbox())){
+					it = enemy_bullets_.erase(it);
 					is_deleted = true;
 					break;
 			}
@@ -199,21 +235,26 @@ void Engine::render_background(){
 }
 
 void Engine::render_player_type_objects(){
-
+	for (auto &bullet_object : enemy_bullets_){
+		render_from_queue(bullet_object->get_queue());
+	}
+	for (auto &bullet_object : player_bullets_){
+		render_from_queue(bullet_object->get_queue());
+	}
 	for (auto &enemy_object : enemy_objects_){
 		render_from_queue(enemy_object->get_queue());
 	}
 	for (auto &player_object : player_objects_){
 		render_from_queue(player_object->get_queue());
 	}
-	for (auto &bullet_object : player_bullets_){
-		render_from_queue(bullet_object->get_queue());
-	}
 }
 
 void Engine::render_neutral_objects(){
 	for (auto &wall_object : wall_objects_){
-				render_from_queue(wall_object->get_queue());
+//				render_from_queue(wall_object->get_queue());
+				SDL_Rect temp_rect = wall_object->get_temp_rect();
+				wall_drawer->create_blank_texture(temp_rect.w, temp_rect.h, 0x00, 0x00, 0xFF, 0xFF);
+				wall_drawer->render(temp_rect.x+shift_x_, temp_rect.y+shift_y_);
 		}
 }
 

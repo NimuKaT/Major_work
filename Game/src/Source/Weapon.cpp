@@ -67,6 +67,18 @@ void Weapon::reload_weapon(){
 	}
 }
 
+bool Weapon::is_weapon_empty(){
+	return current_ammo_in_clip == 0;
+}
+
+bool Weapon::is_weapon_reloading(){
+	return is_reloading;
+}
+
+Uint16 Weapon::ammo_left_in_clip(){
+	return current_ammo_in_clip;
+}
+
 std::vector<std::shared_ptr<Bullet>> Weapon::get_bullet_shot(SDL_Point barrel_position, float weapon_angle){
 	std::vector<std::shared_ptr<Bullet>> bullet_pellet;
 	if (is_shooting && !is_reloading){
@@ -97,6 +109,7 @@ std::vector<std::shared_ptr<Bullet>> Weapon::get_bullet_shot(SDL_Point barrel_po
 	}
 	return bullet_pellet;
 }
+
 
 MiniGun::MiniGun(){
 	Weapon();

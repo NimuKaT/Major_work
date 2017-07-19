@@ -97,7 +97,7 @@ public:
 	~Entity();
 	virtual void update() = 0;
 	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
-	virtual std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle) = 0;
+	std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle);
 	void bounce_object(HitBox& test_object_ref);
 
 };
@@ -113,8 +113,6 @@ public:
 	void reload();
 
 private:
-	Uint32 gun_cooldown_ticks_ = 0;
-	bool can_shoot_ = true;
 	bool input_states[5];
 	std::unique_ptr<Weapon> current_weapon;
 
@@ -126,17 +124,21 @@ public:
 	~Enemy();
 	virtual void update() = 0;
 	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
+	virtual std::vector<std::shared_ptr<Bullet>> shoot_weapon() = 0;
+	bool is_weapon_triggered();
 
-
+protected:
+	std::unique_ptr<Weapon> enemy_weapon;
+	bool is_firing;
 };
 
-class EnemySentry : Enemy{
+class EnemySentry : public Enemy{
 public:
-	EnemySentry(SDL_Point spawn_coord);
+	EnemySentry(SDL_Point spawn_point);
 	~EnemySentry();
 	void update();
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
-	std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle);
+	std::vector<std::shared_ptr<Bullet>> shoot_weapon();
 protected:
 
 private:
@@ -164,6 +166,7 @@ public:
 	Wall(int x, int y, Uint32 width, Uint32 height);
 	~Wall();
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
+	SDL_Rect get_temp_rect();
 };
 
 

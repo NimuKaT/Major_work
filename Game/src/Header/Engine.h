@@ -15,7 +15,7 @@
 //stub constants
 //
 //const int TILE_DIMENSION = 16;
-const static Uint8 temp_camera_step_size = 4;
+const static Uint8 temp_camera_step_size = 8;
 
 // Space for enums for stages enemy types etc.
 
@@ -87,6 +87,9 @@ private:
 
 //	Temp objects
 	Camera test_camera_;
+
+
+	std::shared_ptr<Texture> wall_drawer;
 
 };
 

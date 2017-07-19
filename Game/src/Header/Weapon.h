@@ -21,6 +21,9 @@ public:
 	std::vector<std::shared_ptr<Bullet>> get_bullet_shot(SDL_Point barrel_position, float weapon_angle);
 	bool can_shoot();
 	void reload_weapon();
+	Uint16 ammo_left_in_clip();
+	bool is_weapon_empty();
+	bool is_weapon_reloading();
 protected:
 	bool is_shooting = false;
 	bool is_reloading = false;
