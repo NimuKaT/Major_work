@@ -66,6 +66,7 @@ void Texture::create_blank_texture(int width, int height, Uint8 red, Uint8 green
 	SDL_SetTextureBlendMode(object_texture_, blend_mode_);
 	SDL_SetRenderDrawColor(renderer_ptr_, red, green, blue, alpha);
 	object_texture_ = SDL_CreateTexture(renderer_ptr_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+
 	setBlendMode(blend_mode_);
 
 	if (object_texture_ == NULL){
@@ -73,6 +74,11 @@ void Texture::create_blank_texture(int width, int height, Uint8 red, Uint8 green
 	}
 	else{
 		clip_from_texture();
+	}
+	if (alpha != 0x00){
+		set_as_render_target();
+		SDL_RenderFillRect(renderer_ptr_, &source_rect_);
+		SDL_SetRenderTarget(renderer_ptr_, NULL);
 	}
 	SDL_SetRenderDrawColor(renderer_ptr_, 0xFF, 0xFF, 0xFF, 0xFF);
 }

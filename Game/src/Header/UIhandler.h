@@ -26,6 +26,8 @@ public:
 	void set_listner(Input_event* event_log);
 	void set_event_trigger(bool* event_trigger);
 	void update_event();
+	void update_element(int mouse_x, int mouse_y, bool mouse_down);
+	bool element_clicked();
 
 protected:
 	bool is_hidden_;
@@ -45,6 +47,9 @@ protected:
 	bool is_clicked_;
 	bool* trigger_flag_;
 	bool is_over_;
+	bool has_released_over;
+	bool click_started_on;
+	bool unique_click;
 };
 
 class UI_button : public UI_element{

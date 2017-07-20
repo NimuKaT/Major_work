@@ -8,6 +8,7 @@
 #include "../Header/TestMenu.h"
 
 Test_Menu::Test_Menu(SDL_Renderer* target_renderer, std::shared_ptr<Input_event> &input_ptr){
+	next_menu = TEST_MENU;
 	renderer_ptr_ = target_renderer;
 	input_data_ = input_ptr;
 	button_event_ = false;

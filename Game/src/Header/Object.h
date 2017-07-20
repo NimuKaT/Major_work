@@ -111,6 +111,9 @@ public:
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();
 	std::vector<std::shared_ptr<Bullet>> shoot_gun(float true_angle);
 	void reload();
+	int get_weapon_capacity();
+	int get_current_ammo_count();
+	float get_reload_percentage();
 
 private:
 	bool input_states[5];
@@ -126,15 +129,24 @@ public:
 	virtual std::tuple<int, int, TEXTURE_ID, int> get_queue() = 0;
 	virtual std::vector<std::shared_ptr<Bullet>> shoot_weapon() = 0;
 	bool is_weapon_triggered();
+	void get_enemy_point(SDL_Point);
+	void player_lost();
+	Uint64 get_points();
 
 protected:
 	std::unique_ptr<Weapon> enemy_weapon;
 	bool is_firing;
+	bool found_player;
+	SDL_Point player_point_;
+	int movement_speed_;
+	Uint64 score_value_;
+	Uint16 shoot_dealy;
+	Uint16 delay_ticks;
 };
 
 class EnemySentry : public Enemy{
 public:
-	EnemySentry(SDL_Point spawn_point);
+	EnemySentry(SDL_Point spawn_point, int move_speed, std::unique_ptr<Weapon> weapon, Uint64 score_value);
 	~EnemySentry();
 	void update();
 	std::tuple<int, int, TEXTURE_ID, int> get_queue();

@@ -16,6 +16,7 @@
 #include <forward_list>
 #include <tuple>
 #include <array>
+#include <time.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -33,8 +34,14 @@ static const std::string slash="/";
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
 extern Uint8 INIT_MENU;
+extern Uint32 FULLSCREEN;
+
+extern int& menu_ptr;
+
 const Uint32 TEMP_FRAME_RATE_CAP = 60;
 const Uint32 TEMP_TICK_PER_FRAME = 1000 / TEMP_FRAME_RATE_CAP;
+
+
 
 enum TEXTURE_ID{
 	PLAYER,
@@ -61,6 +68,7 @@ enum KEY_PRESS {
 	KEY_PRESS_DOWN,
 	KEY_PRESS_RIGHT,
 	KEY_PRESS_ESC,
+	KEY_PRESS_SPACE,
 	KEY_PRESS_MB_1,
 	KEY_PRESS_DEFAULT
 
@@ -101,6 +109,26 @@ enum TEST_BALL_RECT{
 	BALL_LENGTH
 };
 
+enum TILE_DATA{
+	WALL_BLANK,
+	WALL_LEFT,
+	WALL_LEFT_TOP,
+	WALL_LEFT_BOTTOM,
+	WALL_RIGHT,
+	WALL_RIGHT_TOP,
+	WALL_RIGHT_BOTTOM,
+	WALL_TOP,
+	WALL_BOTTOM,
+	TILE_BLANK,
+	TILE_LEFT,
+	TILE_LEFT_TOP,
+	TILE_LEFT_BOTTOM,
+	TILE_RIGHT,
+	TILE_RIGHT_TOP,
+	TILE_RIGHT_BOTTOM,
+	TILE_TOP,
+	TILE_BOTTOM
+};
 //TODO remove basic arrays and pointers
 
 #endif /* GLOBAL_H_ */

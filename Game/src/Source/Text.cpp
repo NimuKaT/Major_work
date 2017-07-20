@@ -36,6 +36,7 @@ void Text::render(int x, int y){
 			printf("Unable to load image. TTF_Error: %s\n", TTF_GetError());
 		}
 		else{
+			SDL_DestroyTexture(object_texture_);
 			object_texture_ = SDL_CreateTextureFromSurface(renderer_ptr_, loaded_surface);
 
 			if (object_texture_ == NULL){
@@ -43,7 +44,7 @@ void Text::render(int x, int y){
 			}
 			SDL_FreeSurface(loaded_surface);
 		}
-		TTF_SizeText(font_, text_.c_str(), &width_, &height_);
+		update_size_();
 		SDL_Rect dstrect = {x, y, width_, height_};
 		SDL_RenderCopy(renderer_ptr_, object_texture_, NULL, &dstrect);
 	}
@@ -104,10 +105,16 @@ void Text::set_space_size(int width, int height){
 void Text::update_font(){
 	TTF_CloseFont(font_); //Free currently open font
 	font_ = TTF_OpenFont(font_path_.c_str(), font_size_);
+	if (_is_renderable()){
+		update_size_();
+	}
 }
 
 void Text::set_text(std::string text){
 	text_ = text;
+	if (_is_renderable()){
+		update_size_();
+	}
 }
 
 bool Text::_is_renderable(){
@@ -116,30 +123,34 @@ bool Text::_is_renderable(){
 	if (text_ != std::string()){
 		if (font_path_ != std::string()){
 			if (font_size_ > 0){
-				if (width_ > 0 && height_ > 0){
+//				if (width_ > 0 && height_ > 0){
 					renderable = true;
-				}
-				else{
-					std::cout<<"Could not render text. Texture width or height is 0.\n"<<std::endl;
-				}
+//				}
+//				else{
+//					std::cout<<"Could not render text. Texture width or height is 0.\n"<<std::endl;
+//				}
 			}
 			else{
-				std::cout<<"Could not render text. Font size is 0.\n"<<std::endl;
+//				std::cout<<"Could not render text. Font size is 0.\n"<<std::endl;
 			}
 		}
 		else{
-			std::cout<<"Could not render text. Font path does not exist.\n"<<std::endl;
+//			std::cout<<"Could not render text. Font path does not exist.\n"<<std::endl;
 		}
 	}
 	else{
-		std::cout<<"Could not render text. Text is empty.\n"<<std::endl;
+//		std::cout<<"Could not render text. Text is empty.\n"<<std::endl;
 	}
 	return renderable;
 }
 
+SDL_Point Text::get_size(){
+	return SDL_Point{width_, height_};
+}
 
-
-
+void Text::update_size_(){
+	TTF_SizeText(font_, text_.c_str(), &width_, &height_);
+}
 
 
 

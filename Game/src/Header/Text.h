@@ -23,6 +23,7 @@ public:
 	void set_text(std::string text);
 	void update_font();
 	void set_alpha(Uint8 alpha);
+	SDL_Point get_size();
 
 private:
 	std::string font_path_;
@@ -30,6 +31,7 @@ private:
 	TTF_Font* font_;
 	SDL_Color color_;
 	int font_size_;
+	void update_size_();
 
 	bool _is_renderable();
 };

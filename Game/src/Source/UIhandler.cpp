@@ -28,6 +28,9 @@ UI_element::UI_element(){
 	is_clicked_ = false;
 	trigger_flag_ = NULL;
 	is_over_ = false;
+	has_released_over = false;
+	click_started_on = false;
+	unique_click = true;
 }
 
 //TODO make text, element_decoration and clip_number independent of init_element
@@ -48,14 +51,16 @@ bool UI_element::init_element(SDL_Renderer* renderer_ptr, std::string text, Spri
 		element_texture_.set_renderer(renderer_ptr_);
 		element_texture_.create_blank_texture(decoration_clip.w, decoration_clip.h);
 
-		SDL_Rect text_clip = {0, 0, decoration_clip.w - 2*padding_both_, decoration_clip.h - 2*padding_both_};
-		text_texture_.init(renderer_ptr_, "Sans", text, text_clip);
+		text_texture_.set_renderer(renderer_ptr_);
+		text_texture_.set_font("Sans");
+		text_texture_.set_text(text);
 		text_texture_.set_color(255, 0, 0, 100);
 		text_texture_.set_font_size(42);
+		SDL_Point text_size = text_texture_.get_size();
 
 		element_texture_.set_as_render_target();
 		decoration_ptr_->render(0, 0, clip_number_);
-		text_texture_.render(5, 5);
+		text_texture_.render((decoration_clip.w/2) - (text_size.x/2), (decoration_clip.h/2) - (text_size.y/2));
 		element_init = true;
 	}
 	SDL_SetRenderTarget(renderer_ptr_, NULL);
@@ -109,11 +114,7 @@ void UI_element::set_event_trigger(bool* event_triger){
 }
 // TODO remove pointer
 void UI_element::update_event(){
-	if (x_position_ < *mouse_x_ && x_position_ + width_ > *mouse_x_){
-		if (y_position_ < *mouse_y_ && y_position_ + height_ > *mouse_y_){
-			is_over_ = true;
-		}
-	}
+
 	if (is_clicked_ && is_over_ && !*mouse_MB1_state_){
 		*trigger_flag_ = true;
 	}
@@ -125,3 +126,57 @@ void UI_element::update_event(){
 	}
 }
 
+void UI_element::update_element(int mouse_x, int mouse_y, bool mouse_down){
+	if (!is_hidden_){
+		if (x_position_ < mouse_x && x_position_ + width_ > mouse_x){
+			if (y_position_ < mouse_y && y_position_ + height_ > mouse_y){
+				is_over_ = true;
+			}
+			else{
+				is_over_ = false;
+			}
+		}
+		else{
+			is_over_ = false;
+		}
+
+	//	Check if the button was clicked and released on element
+		if (is_clicked_){
+			if (is_over_ && !mouse_down && click_started_on){
+				has_released_over = true;
+			}
+		}
+
+	//	Checks click began on element
+		if (is_over_ && mouse_down && unique_click){
+			has_released_over = false;
+			is_clicked_ = true;
+			click_started_on = true;
+		}
+		else if(!is_over_ && mouse_down){
+			click_started_on = false;
+		}
+
+
+	//	Check its a unique click
+		if (mouse_down){
+			unique_click = false;
+		}
+		else if (!mouse_down){
+			unique_click = true;
+			is_clicked_ = false;
+		}
+	}
+	else{
+		unique_click = true;
+		is_clicked_ = false;
+		has_released_over = false;
+		click_started_on = false;
+	}
+}
+
+bool UI_element::element_clicked(){
+	bool has_clicked = has_released_over;
+	has_released_over = false;
+	return has_clicked;
+}

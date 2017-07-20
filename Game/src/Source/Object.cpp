@@ -8,7 +8,6 @@
 #include "../Header/Object.h"
 
 HitBox::HitBox(){
-std::cout<<"copy "<<std::endl;
 	true_x_ = 0;
 	true_y_ = 0;
 	x_ = 0;
@@ -17,7 +16,6 @@ std::cout<<"copy "<<std::endl;
 	height_ = 0;
 }
 HitBox::HitBox(SDL_Rect rect){
-//	std::cout<<"x: "<<rect.x<<"\ny: "<<rect.y<<"\nwidth: "<<rect.w<<"\nheight: "<<rect.h<<std::endl;
 		true_x_ = rect.x;
 		true_y_ = rect.y;
 		x_ = rect.x;
@@ -27,7 +25,6 @@ HitBox::HitBox(SDL_Rect rect){
 }
 
 HitBox::HitBox(int x, int y, int width, int height){
-//	std::cout<<"x: "<<x<<"\ny: "<<y<<"\nwidth: "<<width<<"\nheight: "<<height<<std::endl;
 	true_x_ = x;
 	true_y_ = y;
 	x_ = x;
@@ -160,9 +157,11 @@ Bullet::Bullet(int initial_x, int initial_y, int vel_x, int vel_y){
 	hit_boxes.push_back(std::vector<HitBox>());
 	hit_boxes[0].push_back(HitBox(object_rect_));
 }
+
 Bullet::~Bullet(){
 
 }
+
 void Bullet::update(){
 	object_rect_.x += vel_x_;
 	object_rect_.y += vel_y_;
@@ -191,10 +190,10 @@ Player::Player(SDL_Point spawn_point){
 
 	hit_boxes.resize(1);
 	hit_boxes.push_back(std::vector<HitBox>());
-	hit_boxes[0].push_back(HitBox(0, 0, object_rect_.w, object_rect_.h));
+	hit_boxes[0].push_back(HitBox(object_rect_.x, object_rect_.y, object_rect_.w, object_rect_.h));
 
 
-	current_weapon = std::unique_ptr<Weapon>(new MiniGun());
+	current_weapon = std::unique_ptr<Weapon>(new Rifle());
 
 	associated_sprite_queues_.resize(1);
 	associated_sprite_queues_[0].push_back(std::make_tuple(object_rect_.x, object_rect_.y, TEST_BALL, int(BALL_GREEN)));
@@ -240,8 +239,21 @@ std::vector<std::shared_ptr<Bullet>> Player::shoot_gun(float true_angle){
 	}
 	return bullet_pellet;
 }
+
 void Player::reload(){
 	current_weapon->reload_weapon();
+}
+
+int Player::get_weapon_capacity(){
+	return current_weapon->ammo_clip_size();
+}
+
+int Player::get_current_ammo_count(){
+	return current_weapon->ammo_left_in_clip();
+}
+
+float Player::get_reload_percentage(){
+	return current_weapon->weapon_reload_percent();
 }
 
 /*
@@ -249,29 +261,58 @@ void Player::reload(){
  */
 Enemy::Enemy(){
 	is_firing = false;
+	found_player = false;
+	shoot_dealy = 40;
+	delay_ticks = 0;
 }
+
 Enemy::~Enemy(){
 
 }
+
 void Enemy::update(){
 	std::get<0>(associated_sprite_queues_[current_sprites_][current_frame_]) = object_rect_.x;
 	std::get<1>(associated_sprite_queues_[current_sprites_][current_frame_]) = object_rect_.y;
 }
+
 bool Enemy::is_weapon_triggered(){
 	return is_firing;
+}
+
+Uint64 Enemy::get_points(){
+	return score_value_;
+}
+
+void Enemy::get_enemy_point(SDL_Point player_point){
+	player_point_ = player_point;
+	SDL_angle_ = atan2(-(centre_point_.y - player_point_.y), -(centre_point_.x - player_point_.x))/PI*180;
+	found_player = true;
+
+}
+
+void Enemy::player_lost(){
+//	found_player = false;
+	is_firing = false;
+	player_point_ = {};
 }
 
 /*
  * 			ENEMY TYPE SENTRY CLASS
  */
-EnemySentry::EnemySentry(SDL_Point spawn_point){
-//	Enemy();
-	centre_point_ = spawn_point;
+EnemySentry::EnemySentry(SDL_Point spawn_point, int move_speed, std::unique_ptr<Weapon> weapon, Uint64 score_value){
+//	Enemy::Enemy();
+	found_player = false;
+
 	object_rect_.w = 100;
 	object_rect_.h = 100;
-	object_rect_.x = centre_point_.x - (object_rect_.w/2);
-	object_rect_.y = centre_point_.y - (object_rect_.h/2);
+	object_rect_.x = spawn_point.x;
+	object_rect_.y = spawn_point.y;
+	centre_point_ = SDL_Point {object_rect_.x + (object_rect_.w/2), object_rect_.y + (object_rect_.h/2)};
 	SDL_angle_ = 0.0;
+
+	movement_speed_ = move_speed;
+
+	score_value_ = score_value;
 
 	hit_boxes.resize(1);
 	hit_boxes.push_back(std::vector<HitBox>());
@@ -280,31 +321,53 @@ EnemySentry::EnemySentry(SDL_Point spawn_point){
 	associated_sprite_queues_.resize(1);
 	associated_sprite_queues_[0].push_back(std::make_tuple(object_rect_.x, object_rect_.y, TEST_BALL, int(BALL_RED)));
 
-	enemy_weapon = std::unique_ptr<Weapon>(new MiniGun());
+	enemy_weapon = std::move(weapon);
 	is_firing = false;
+	shoot_dealy = 60;
+	delay_ticks = 0;
 }
+
 EnemySentry::~EnemySentry(){
 
 }
 
 void EnemySentry::update(){
-	std::get<0>(associated_sprite_queues_[current_sprites_][current_frame_]) = object_rect_.x;
-	std::get<1>(associated_sprite_queues_[current_sprites_][current_frame_]) = object_rect_.y;
 	enemy_weapon->add_tick();
 	if (enemy_weapon->is_weapon_empty()){
 		enemy_weapon->reload_weapon();
 	}
-	else if (!enemy_weapon->is_weapon_reloading() && enemy_weapon->can_shoot()){
+	else if (!enemy_weapon->is_weapon_reloading() && enemy_weapon->can_shoot() && delay_ticks >= shoot_dealy){
 		is_firing = true;
+	}
+	if (delay_ticks < shoot_dealy && found_player){
+		delay_ticks++;
+	}
+	if (delay_ticks > 0 && !found_player){
+		delay_ticks--;
+	}
+	if (found_player){
+		vel_x_ = cos(SDL_angle_/180*PI)*movement_speed_;
+		vel_y_ = sin(SDL_angle_/180*PI)*movement_speed_;
+		object_rect_.x += vel_x_;
+		object_rect_.y += vel_y_;
+		hit_boxes[0][0].set_position(object_rect_.x, object_rect_.y);
+		centre_point_ = {object_rect_.x + object_rect_.w/2, object_rect_.y + object_rect_.h/2};
+		std::get<0>(associated_sprite_queues_[current_sprites_][current_frame_]) = object_rect_.x;
+		std::get<1>(associated_sprite_queues_[current_sprites_][current_frame_]) = object_rect_.y;
+
+
 	}
 }
 
 std::tuple<int, int, TEXTURE_ID, int> EnemySentry::get_queue(){
+	vel_x_ = 0;
+	vel_y_ = 0;
 	return associated_sprite_queues_[current_sprites_][current_frame_];
 }
+
 std::vector<std::shared_ptr<Bullet>> EnemySentry::shoot_weapon(){
 	std::vector<std::shared_ptr<Bullet>> bullet_pellets;
-	if (is_firing){
+	if (found_player){
 		if (enemy_weapon->shoot_weapon()){
 			bullet_pellets = enemy_weapon->get_bullet_shot(centre_point_, SDL_angle_);
 		}

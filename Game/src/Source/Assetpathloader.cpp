@@ -9,6 +9,7 @@
 
 int SCREEN_WIDTH = 1366;
 int SCREEN_HEIGHT = 768;
+Uint32 FULLSCREEN = 0;
 Uint8 INIT_MENU = TEST_MENU;
 std::vector<std::string> IMAGE_PATHS(DEFAULT_TEXTURE_ID, "");
 std::vector<std::vector<SDL_Rect>> IMAGE_RECTS(DEFAULT_TEXTURE_ID);
@@ -46,6 +47,14 @@ std::vector<std::string> get_options(){
 					}
 					else if (value == "game"){
 						INIT_MENU = GAME_MENU;
+					}
+				}
+				else if (option == "full_screen"){
+					if (value == "true"){
+						FULLSCREEN = SDL_WINDOW_FULLSCREEN_DESKTOP;
+					}
+					else{
+						FULLSCREEN = 0;
 					}
 				}
 			}

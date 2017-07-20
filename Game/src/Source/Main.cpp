@@ -11,7 +11,7 @@ bool init(SDL_Window* &window_ptr_ref, SDL_Renderer* &renderer_ptr_ref){
 
 	}
 	else{
-		window_ptr_ref = SDL_CreateWindow("A game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		window_ptr_ref = SDL_CreateWindow("Gun Mayhem", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | FULLSCREEN);
 
 		if (window_ptr_ref == NULL){
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -103,6 +103,14 @@ void get_input(SDL_Event& event, std::shared_ptr<Input_event> &input_data, bool 
 						input_data->key_pressed[KEY_PRESS_RIGHT] = event.key.state;
 						break;
 					}
+					case SDLK_ESCAPE:{
+						input_data->key_pressed[KEY_PRESS_ESC] = event.key.state;
+						break;
+					}
+					case SDLK_SPACE:{
+						input_data->key_pressed[KEY_PRESS_SPACE] = event.key.state;
+						break;
+					}
 				}
 				break;
 			}
@@ -151,6 +159,7 @@ int main(int argc, char* args[]){
 
 //		pointer to int for current menu
 		std::unique_ptr<int> menu_ptr(new int(INIT_MENU));
+//		int menu_ptr = INIT_MENU;
 
 //		Vector of Menu objects
 		std::vector<std::unique_ptr<MenuManager>> menus(DEFAULT_MENU);
@@ -188,7 +197,13 @@ int main(int argc, char* args[]){
 			//Push to screen
 			SDL_RenderPresent(renderer_ptr);
 
-
+			int next_menu = menus[*menu_ptr]->change_menu();
+			if (next_menu != *menu_ptr){
+				*menu_ptr = next_menu;
+			}
+			if (!quit){
+				quit = menus[*menu_ptr]->quit_game();
+			}
 		}
 	}
 

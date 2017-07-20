@@ -27,11 +27,16 @@ public:
 //	virtual void unload_data() = 0;
 	virtual void render_texture() = 0;
 	virtual void update_logic() = 0;
+	int change_menu();
+	bool quit_game();
 
 protected:
 	int mouse_x_, mouse_y_;
 	std::weak_ptr<Input_event> input_data_;
 	SDL_Renderer* renderer_ptr_;
+	int next_menu;
+	int current_menu;
+	bool quit = false;
 
 };
 
@@ -42,14 +47,22 @@ public:
 	void event_Handler(SDL_Event &event, bool &quit);
 	void update_logic();
 
+
 private:
 	std::vector<render_queue> queue;
 	std::vector<SpriteSheet> sprite_sheets;
 	std::vector<std::string> spritePaths;
 	std::vector<SDL_Rect> clips;
-	Text test_text;
+	Text game_logo;
 	UI_element _test_button;
 	Texture main_menu_background;
+
+	SpriteSheet element_deco;
+
+	UI_element play_button_;
+	UI_element options_button_;
+	UI_element exit_button_;
+
 };
 
 

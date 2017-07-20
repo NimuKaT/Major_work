@@ -22,8 +22,10 @@ public:
 	bool can_shoot();
 	void reload_weapon();
 	Uint16 ammo_left_in_clip();
+	Uint16 ammo_clip_size();
 	bool is_weapon_empty();
 	bool is_weapon_reloading();
+	float weapon_reload_percent();
 protected:
 	bool is_shooting = false;
 	bool is_reloading = false;

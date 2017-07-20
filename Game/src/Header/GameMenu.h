@@ -29,10 +29,20 @@ public:
 
 protected:
 	void load_stage();
-	Engine game_instance;
+	std::unique_ptr<Engine> game_instance;
 
 private:
 	bool is_paused;
+	bool unique_press;
+	bool quit_pressed;
+	SpriteSheet button_deco;
+	Texture pause_menu_shade_;
+	Text paused_text;
+	Text quit_confirmation_text_;
+	UI_element resume_button;
+	UI_element quit_button;
+	UI_element quit_yes_button_;
+	UI_element quit_no_button_;
 
 };
 
