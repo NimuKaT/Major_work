@@ -360,9 +360,7 @@ void EnemySentry::update(){
 }
 
 std::tuple<int, int, TEXTURE_ID, int> EnemySentry::get_queue(){
-	vel_x_ = 0;
-	vel_y_ = 0;
-	return associated_sprite_queues_[current_sprites_][current_frame_];
+	return std::make_tuple(object_rect_.x, object_rect_.y, TEST_BALL, int(BALL_RED));
 }
 
 std::vector<std::shared_ptr<Bullet>> EnemySentry::shoot_weapon(){

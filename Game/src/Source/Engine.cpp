@@ -524,7 +524,7 @@ void Engine::render_UI(){
 	max_ammo_text_->render(3750, 2110);
 	current_ammo_text_->render(3770, 2060);
 	if (weapon_cooldown_percent > 0.0){
-		reload_indicator_->render(3530, 2100);
+		reload_indicator_->render(3530, 2080);
 	}
 
 	score_backdorp_->render(3840 - 350, 0);
